@@ -1,0 +1,39 @@
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LandingPage from "./containers/LandingPage";
+import Register from "./components/users/Register";
+import Login from "./components/users/Login";
+import Profile from "./components/users/Profile";
+import "react-toastify/dist/ReactToastify.css";
+import ProductDetails from "./components/products/ProductDetails";
+import DoctorList from "./components/doctors/DoctorList";
+import Layout from "./layout/Layout";
+import LabDetails from "./components/labs/LabDetails";
+import ProductsList from "./components/products/ProductsList";
+import Categories from "./components/products/Categories";
+import SpecialtiesList from "./components/doctors/SpecialtiesList";
+import Labs from "./components/labs/Labs";
+
+const Router = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<LandingPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/products" element={<ProductsList />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/specialty" element={<SpecialtiesList />} />
+          <Route path="/specialty/:specialty" element={<DoctorList />} />
+          <Route path="/labs" element={<Labs />} />
+          <Route path="/labs/:id" element={<LabDetails />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default Router;

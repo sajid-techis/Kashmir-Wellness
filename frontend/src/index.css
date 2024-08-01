@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@media screen and (max-width:640px) {
+    button.buy-now span{
+        align-items: center!important;
+        font-size: 9px !important;
+        font-weight: bold !important;;
+       }
+    button.buy-now svg {
+        width: 1rem;
+        height: 1rem;
+    }
+}
