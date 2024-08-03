@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+    .border-ring {
+      @apply relative flex flex-col items-center p-2 rounded-full border-2 border-transparent;
+      background: linear-gradient(to right, #f00, #0f0, #00f);
+      background-clip: padding-box;
+      padding: 4px;
+    }
+  }
+
+
 
 @media screen and (max-width:640px) {
     button.buy-now span{

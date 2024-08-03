@@ -20,10 +20,10 @@ router.get('/get',async(req,res) => {
 
         
         if (req.query.name) {
-            filters.name = { $regex: req.query.name, $options: 'i' }; // Case-insensitive search
+            filters.name = { $regex: req.query.name, $options: 'i' }; 
         }
         if (req.query.city) {
-            filters.city = { $regex: req.query.city, $options: 'i' }; // Case-insensitive search
+            filters.city = { $regex: req.query.city, $options: 'i' }; 
         }
         const labs = await Lab.find(filters);
         res.status(200).json({Message: "Lab Received Successfully",labs})

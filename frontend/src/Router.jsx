@@ -13,6 +13,7 @@ import ProductsList from "./components/products/ProductsList";
 import Categories from "./components/products/Categories";
 import SpecialtiesList from "./components/doctors/SpecialtiesList";
 import Labs from "./components/labs/Labs";
+import TestSearchPage from "./containers/TestSearchPage";
 
 const Router = () => {
   return (
@@ -23,6 +24,7 @@ const Router = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/search" element={<TestSearchPage />} />
           <Route path="/products" element={<ProductsList />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/products/:id" element={<ProductDetails />} />

@@ -5,10 +5,12 @@ const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 })
 
-export const getProducts = async (categoryId = '', limit = 6) => {
+
+//Api Call for All Products
+export const getProducts = async (categoryId) => {
     try {
         const response = await api.get('/products/get', {
-            params: { category: categoryId, limit }
+            params: { category: categoryId }
         });
         return response.data.products;
     } catch (error) {
@@ -16,6 +18,7 @@ export const getProducts = async (categoryId = '', limit = 6) => {
     }
 };
 
+// Api Call for Product Details
 export const getProductDetails = async (id) => {
     try {
         const response = await api.get(`/products/get/${id}`);
@@ -24,3 +27,13 @@ export const getProductDetails = async (id) => {
         throw new Error(error.message);
     }
 };
+
+// Api call for featured Products
+export const getFeaturedProducts = async () => {
+    try {
+        const response = await api.get('/products/featured-products');
+        return response.data.featuredProducts;
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}

@@ -43,7 +43,7 @@ const FeaturedLabs = () => {
           View All
         </Button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 pb-14">
       {featuredLabs &&
         featuredLabs.map((lab) => (
             <div

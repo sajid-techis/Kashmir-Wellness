@@ -18,6 +18,7 @@ const FeaturedDoctors = () => {
 
   const handleView = () => {
     navigate("/specialty");
+    window.scrollTo(0, 0);
   };
 
   if (status === "Loading") {

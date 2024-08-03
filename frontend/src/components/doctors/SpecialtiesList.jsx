@@ -73,12 +73,12 @@ const SpecialtiesList = () => {
           {specialties && specialties.length > 0 ? (
             specialties.map((specialty) => (
               <div
-                key={specialty._id} // Unique key for each item
+                key={specialty._id} 
                 className="bg-white text-primary border border-gray-200 rounded-lg shadow-md flex flex-col gap-1 cursor-pointer"
-                onClick={() => onSelectSpecialty(specialty._id)} // Correct parameter for navigation
+                onClick={() => onSelectSpecialty(specialty._id)} 
               >
                 <img
-                  src={getIconForSpecialty(specialty._id)} // Correct parameter for icon
+                  src={getIconForSpecialty(specialty._id)} 
                   alt={specialty._id}
                   className="w-full h-60 object-cover rounded-t-lg"
                 />

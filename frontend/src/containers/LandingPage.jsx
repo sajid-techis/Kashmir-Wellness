@@ -1,32 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "flowbite-react";
-import Header from "../components/common/Header";
 import CarouselComponent from "../components/common/Carousel";
 import Offers from "../components/common/Offers";
-import Categories from "../components/products/Categories";
-import { useDispatch, useSelector } from "react-redux";
-import { getCategoriesThunk } from "../features/categories/categorySlice";
-import SpecialtiesList from "../components/doctors/SpecialtiesList";
-import Labs from "../components/labs/Labs";
-import Products from "../components/products/Products";
 import FeaturedDoctors from "../components/doctors/FeaturedDoctors";
 import FeaturedLabs from "../components/labs/FeaturedLabs";
+import FeaturedProducts from "../components/products/FeaturedProducts";
+import UniversalSearch from "../components/common/UniversalSearch";
 
 const LandingPage = () => {
-  const dispatch = useDispatch();
-  const categories = useSelector((state) => state.category.categories);
-  const [selectedCategory, setSelectedCategory] = useState("");
-
-  useEffect(() => {
-    dispatch(getCategoriesThunk());
-  }, [ selectedCategory, dispatch]);
-
- 
-
   return (
     <>
-      <Header />
-      <div className="mt-20 sm:mt-10">
+    <div className="w-full lg:max-w-xl mx-auto sticky top-0 z-30" >
+    <UniversalSearch/>
+    </div>
         <section>
           <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
@@ -50,10 +36,9 @@ const LandingPage = () => {
           </div>
         </section>
         <Offers />
-        <Products/>
-        <FeaturedDoctors/>
-        <FeaturedLabs/>
-      </div>
+        <FeaturedProducts />
+        <FeaturedDoctors />
+        <FeaturedLabs />
     </>
   );
 };

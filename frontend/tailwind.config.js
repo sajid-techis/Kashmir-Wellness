@@ -16,11 +16,12 @@ module.exports = {
         delivery:"rgba(244,210,120,0.3)",
         doctor: "rgba(111,214,0,0.6)",
         health: "#EDCFFC",
-        'primary-light': '#6cb2eb', // Lighter shade of primary color
-        'primary-dark': '#2779bd'
+        'primary-light': '#6cb2eb',
+        'primary-dark': '#2779bd',
+        gradient:'linear-gradient(to right, #34D399, #22C55E, #16A34A)'
       },
       backgroundImage: {
-        'custom-gradient': 'linear-gradient(135deg, #28A745 0%, #4CAF50 50%, #2C6B40 100%)',
+        'custom-gradient': 'linear-gradient(to right, #34D399, #22C55E, #16A34A)',
       },
       height:{
         custom: '50rem'
@@ -38,6 +39,9 @@ module.exports = {
         // Add more custom sizes as needed
       }
     },
+    fontFamily: {
+      'body': ["Poppins", "sans-serif"]
+    }
   },
   plugins: [
     flowbite.plugin(),

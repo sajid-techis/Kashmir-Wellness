@@ -58,13 +58,13 @@ const CategoriesSidebar = () => {
   }
 
   return (
-    <div>
+    <div >
       <ul>
         {categories.map((category) => (
           <li
             key={category._id}
-            className={`flex flex-col items-center text-center p-1 mb-2 cursor-pointer rounded-lg hover:bg-primary-light ${
-              new URLSearchParams(location.search).get('category') === category._id ? 'bg-primary-dark' : ''
+            className={`flex flex-col items-center text-center p-1  cursor-pointer rounded-lg hover:bg-primary-light hover:text-white ${
+              new URLSearchParams(location.search).get('category') === category._id ? 'bg-primary-dark text-white' : ''
             }`}
             onClick={() => handleCategoryClick(category._id)}
           >
@@ -72,7 +72,7 @@ const CategoriesSidebar = () => {
             <img
               src={(category.imageUrl)}
               alt={category._id}
-              className="w-20 h-20 object-cover rounded-full"
+              className="w-12 h-12 object-cover rounded-full"
             />
             <span className="text-xs">{category.name}</span>
             </div>

@@ -5,6 +5,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/Logo2.png";
 import LogoutButton from "../users/LogoutButton";
 
+
 const Header = () => {
   const { userInfo, token } = useSelector((state) => state.user);
   const isAuthenticated = !!token;
@@ -15,10 +16,11 @@ const Header = () => {
   };
 
   return (
+    <>
     <Navbar
       fluid
       rounded
-      className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg"
+      className=" bg-white shadow-lg"
     >
       <Navbar.Brand href="/">
         <img src={logo} className="mr-3 h-6 sm:h-9 rounded-full" alt="Logo" />
@@ -28,7 +30,7 @@ const Header = () => {
       </Navbar.Brand>
       <div className="flex md:order-2">
         {isAuthenticated && userInfo ? (
-          <Dropdown
+          <Dropdown className="z-50"
             arrowIcon={false}
             inline
             label={
@@ -42,7 +44,7 @@ const Header = () => {
               />
             }
           >
-            <Dropdown.Header>
+            <Dropdown.Header >
               <span className="flex items-center gap-2">
                 <svg
                   className="w-6 h-6 text-primary dark:text-white"
@@ -73,10 +75,10 @@ const Header = () => {
           </Dropdown>
         ) : (
           <div className="hidden md:flex space-x-4">
-            <Button gradientMonochrome="success" className=" text-xs md:text-sm lg:text-base">
+            <Button gradientMonochrome="success" className="bg-primary text-xs md:text-sm lg:text-base">
               <Link to="/login">Login</Link>
             </Button>
-            <Button gradientMonochrome="success" className="text-xs md:text-sm lg:text-base">
+            <Button gradientMonochrome="success" className="bg-primary text-xs md:text-sm lg:text-base">
               <Link to="/register">Register</Link>
             </Button>
           </div>
@@ -128,6 +130,8 @@ const Header = () => {
         )}
       </Navbar.Collapse>
     </Navbar>
+    
+    </>
   );
 };
 

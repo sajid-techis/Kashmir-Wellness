@@ -1,15 +1,25 @@
 // features/products/productSlice.js
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getProducts, getProductDetails } from "./productApi";
+import { getProducts, getProductDetails, getFeaturedProducts } from "./productApi";
 
-export const getProductsThunk = createAsyncThunk('/products/get', async ({ categoryId, limit = 10 }, { rejectWithValue }) => {
+export const getProductsThunk = createAsyncThunk('/products/get', async ({ categoryId}, { rejectWithValue }) => {
     try {
-        const products = await getProducts(categoryId, limit);
+        const products = await getProducts(categoryId);
         return products;
     } catch (error) {
         return rejectWithValue(error.message);
     }
 });
+
+
+export const getFeaturedProductsThunk = createAsyncThunk('/products/getFeatured', async () => {
+    try {
+        const featuredProducts = await getFeaturedProducts();
+        return featuredProducts
+    } catch (error) {
+        return (error.message)
+    }
+})
 
 export const getProductDetailsThunk = createAsyncThunk('/product/details', async (id, { rejectWithValue }) => {
     try {
@@ -22,6 +32,7 @@ export const getProductDetailsThunk = createAsyncThunk('/product/details', async
 
 const initialState = {
     products: [],
+    featuredProducts: [],
     product: null,
     status: 'idle',
     error: null
@@ -54,7 +65,18 @@ const productSlice = createSlice({
             .addCase(getProductDetailsThunk.rejected, (state, action) => {
                 state.status = "Failed";
                 state.error = action.payload;
-            });
+            })
+            .addCase(getFeaturedProductsThunk.pending,(state) => {
+                state.status = "Pending"
+            })
+            .addCase(getFeaturedProductsThunk.fulfilled,(state,action) => {
+                state.status = "Success";
+                state.featuredProducts = action.payload;
+            })
+            .addCase(getFeaturedProductsThunk.rejected,(state,action) => {
+                state.status = "Failed"
+                state.error = action.payload;
+            })
     }
 });
 

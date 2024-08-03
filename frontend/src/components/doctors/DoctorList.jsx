@@ -17,7 +17,6 @@ const DoctorList = () => {
     dispatch(getDoctorsBySpecialtiesThunk(specialty));
   }, [dispatch, specialty]);
 
-  // Filter doctors based on search query
   const filteredDoctors = doctors.filter(doctor =>
     doctor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doctor.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -25,52 +24,56 @@ const DoctorList = () => {
   );
 
   return (
-    <div className="flex w-full h-screen">
-      <div className="w-32 bg-primary text-white p-4 h-screen fixed top-14 left-0 overflow-y-auto z-10 lg:w-60">
-        <SpecialtiesSidebar />
-      </div>
-      <div className="flex-1 ml-32 lg:ml-60 ">
-      <div className="flex justify-between items-center">
-        <div className="fixed top-14 left-32 right-0 z-20 bg-primary p-4 flex flex-col lg:left-60 lg:flex-row lg:items-center lg:justify-between">
-          <h2 className="text-2xl font-bold  text-white">Doctors in {specialty}</h2>
-          <div className="relative w-full lg:w-1/2">
-            <SearchBar searchTerm={searchQuery} setSearchTerm={setSearchQuery} />
-          </div>
+    <div className="w-full">
+      {/* Sticky Search Bar */}
+      <div className="sticky top-0 left-0 right-0 z-20 bg-white p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <h2 className="text-xl md:text-3xl font-bold text-primary hidden lg:block">Doctors in {specialty}</h2>
+        <div className="relative w-full lg:w-1/2">
+          <SearchBar searchTerm={searchQuery} setSearchTerm={setSearchQuery} />
         </div>
       </div>
-      {status === "Loading" && <p className="text-gray-500">Loading...</p>}
-      {status === "Failed" && <p className="text-red-500">Error: {error}</p>}
-      {status === "Success" && filteredDoctors.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-6 mt-48 py-4 px-2 lg:mt-36">
-          {filteredDoctors.map((doctor) => (
-            <div key={doctor._id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
-              <img src={doctor.profileImage} alt={doctor.name} className="w-full h-56 object-cover lg:h-80" />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">Name: {doctor.name}</h3>
-                <p className="text-gray-700 mt-2">Specialty: {doctor.specialty}</p>
-                <p className="text-gray-700 mt-1">Qualifications: {doctor.qualification}</p>
-                <p className="text-gray-700 mt-1">Experience: {doctor.experience}</p>
-                <p className="text-gray-700 mt-1">Email: {doctor.email}</p>
-                <div className="mt-4">
-                  <h4 className="text-md font-semibold text-gray-900">Clinic:</h4>
-                  <p className="text-gray-700">{doctor.clinic.name}</p>
-                  <p className="text-gray-700">{doctor.clinic.contactNumber}</p>
-                  <p className="text-gray-700">{doctor.clinic.address.street}, {doctor.clinic.address.city}, {doctor.clinic.address.state}, {doctor.clinic.address.zipCode}, {doctor.clinic.address.country}</p>
-                </div>
-                <div className="mt-4">
-                  <h4 className="text-md font-semibold text-gray-900">Availability:</h4>
-                  <p className="text-gray-700">Days: {doctor.availability.days.join(", ")}</p>
-                  <p className="text-gray-700">Hours: {doctor.availability.hours.join(", ")}</p>
-                </div>
-              </div>
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="w-28 bg-white pb-14 text-primary px-2 max-h-screen overflow-y-scroll flex flex-col items-center lg:w-40 lg:py-8">
+          <SpecialtiesSidebar />
+        </div>
+        {/* Doctors Grid */}
+        <div className="mt-0 px-2 lg:px-4">
+          {status === "Loading" && <p className="text-gray-500">Loading...</p>}
+          {status === "Failed" && <p className="text-red-500">Error: {error}</p>}
+          {status === "Success" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-scroll max-h-screen pb-20 lg:pb-10">
+              {filteredDoctors.length > 0 ? (
+                filteredDoctors.map((doctor) => (
+                  <div key={doctor._id} className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+                    <img src={doctor.profileImage} alt={doctor.name} className="w-full h-56 object-cover lg:h-80" />
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold text-gray-900">Name: {doctor.name}</h3>
+                      <p className="text-gray-700 mt-2">Specialty: {doctor.specialty}</p>
+                      <p className="text-gray-700 mt-1">Qualifications: {doctor.qualification}</p>
+                      <p className="text-gray-700 mt-1">Experience: {doctor.experience}</p>
+                      <p className="text-gray-700 mt-1">Email: {doctor.email}</p>
+                      <div className="mt-4">
+                        <h4 className="text-md font-semibold text-gray-900">Clinic:</h4>
+                        <p className="text-gray-700">{doctor.clinic.name}</p>
+                        <p className="text-gray-700">{doctor.clinic.contactNumber}</p>
+                        <p className="text-gray-700">{doctor.clinic.address.street}, {doctor.clinic.address.city}, {doctor.clinic.address.state}, {doctor.clinic.address.zipCode}, {doctor.clinic.address.country}</p>
+                      </div>
+                      <div className="mt-4">
+                        <h4 className="text-md font-semibold text-gray-900">Availability:</h4>
+                        <p className="text-gray-700">Days: {doctor.availability.days.join(", ")}</p>
+                        <p className="text-gray-700">Hours: {doctor.availability.hours.join(", ")}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No doctors found for this specialty.</p>
+              )}
             </div>
-          ))}
+          )}
         </div>
-      )}
-      {status === "Success" && filteredDoctors.length === 0 && (
-        <p className="text-gray-500">No doctors found for this specialty.</p>
-      )}
-    </div>
+      </div>
     </div>
   );
 };

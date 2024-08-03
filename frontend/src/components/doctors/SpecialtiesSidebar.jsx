@@ -51,6 +51,10 @@ const SpecialtiesSidebar = () => {
     navigate(`/specialty/${encodeURIComponent(specialtyId)}`);
   };
 
+  const isActive = (specialtyId) => {
+    return new URLSearchParams(location.search).get('specialty') === specialtyId;
+  };
+
   if (status === "Loading") {
     return (
       <FidgetSpinner
@@ -67,23 +71,20 @@ const SpecialtiesSidebar = () => {
   }
 
   return (
-    <div className="pb-16 flex flex-col items-center gap-14">
+    <div className="">
       <ul>
         {specialties.map((specialty) => (
           <li
             key={specialty._id}
-            className={`flex flex-col items-center text-center p-1 mb-2 cursor-pointer rounded-lg hover:bg-primary-light ${
-              new URLSearchParams(location.search).get("specialty") ===
-              specialty._id
-                ? "bg-primary-dark"
-                : ""
+            className={`flex flex-col items-center text-center p-1 mb-2 cursor-pointer rounded-lg ${
+              isActive(specialty._id) ? 'bg-primary-dark text-white' : 'hover:bg-primary-light hover:text-white'
             }`}
             onClick={() => handleSpecialtyClick(specialty._id)}
           >
             <img
               src={getImageForSpecialty(specialty._id)}
               alt={specialty._id}
-              className="w-20 h-20 object-cover rounded-full"
+              className="w-14 h-14 object-cover rounded-full"
             />
             <span className="text-xs lg:text-sm">{specialty._id}</span>
           </li>

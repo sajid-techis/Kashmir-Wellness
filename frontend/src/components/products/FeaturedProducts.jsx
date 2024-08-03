@@ -1,23 +1,22 @@
 // components/Products.jsx
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductsThunk } from "../../features/products/productSlice";
-import ProductCard from "./ProductCard";
+import { getFeaturedProductsThunk, getProductsThunk } from "../../features/products/productSlice";
 import { useNavigate } from "react-router-dom";
 import { FidgetSpinner } from "react-loader-spinner";
 import { Button } from "flowbite-react";
 import { FaCartPlus } from "react-icons/fa";
 
-const Products = () => {
+const FeaturedProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const products = useSelector((state) => state.product.products || []);
+  const products = useSelector((state) => state.product.featuredProducts || []);
   const status = useSelector((state) => state.product.status);
   const error = useSelector((state) => state.product.error);
 
   useEffect(() => {
-    dispatch(getProductsThunk("")); // Fetch a limited number of products
+    dispatch(getFeaturedProductsThunk());
   }, [dispatch]);
 
   if (status === "Loading") {
@@ -33,7 +32,8 @@ const Products = () => {
   if (status === "Failed") return <p>Error: {error}</p>;
 
   const handleViewAll = () => {
-    navigate("/categories"); // Navigate to the categories page
+    navigate("/categories"); 
+    window.scrollTo(0,0)
   };
 
   return (
@@ -63,7 +63,7 @@ const Products = () => {
                 {product.description}
               </p>
             </div>
-            <div className="flex justify-between items-center p-4 gap-4">
+            <div className="flex justify-between items-center p-2 gap-1 lg:p-4 lg:gap-4">
               <p className="text-sm md:text-base text-primary font-bold ">
                 ₹{product.price.toFixed(1)}
               </p>
@@ -82,4 +82,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default FeaturedProducts;

@@ -17,10 +17,9 @@ router.post("/create", async (req, res) => {
       expirationDate,
       prescriptionRequired,
       imageUrl,
-      ratings // Include ratings field
+      ratings 
     } = req.body;
 
-    // Ensure ratings field has default values if not provided
     const newProduct = new Product({
       name,
       description,
@@ -63,24 +62,31 @@ router.get('/get', async (req, res) => {
       ];
     }
 
-    const limit = req.query.limit ? parseInt(req.query.limit) : 10; // Default limit to 10 if not provided
-
-    const aggregationPipeline = [
-      { $match: filters },
-      { $sample: { size: limit } }
-    ];
-
-    const products = await Product.aggregate(aggregationPipeline);
+    const products = await Product.find(filters);
 
     res.status(200).json({
       message: 'Products retrieved successfully',
       products
     });
   } catch (error) {
-    console.error("Error fetching products:", error); // Log the error
+    console.error("Error fetching products:", error);
     res.status(500).json({ message: 'Error fetching products', error: error.message });
   }
 });
+
+//Get Featured Products
+
+router.get('/featured-products', async (req,res) => {
+  try {
+    const limit = 6;
+    const featuredProducts = await Product.aggregate([
+      {$sample: { size: limit}}
+    ])
+    res.status(200).json({Message: "Featured Products Fetched successfully", featuredProducts})
+  } catch (error) {
+    res.status(500).json({Message:"Error fetching featured Products", error: error.message});
+  }
+})
 
 // Get Single Product by ID
 router.get('/get/:id', async (req, res) => {

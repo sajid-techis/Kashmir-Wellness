@@ -9,6 +9,7 @@ const categoryRoute = require('./routes/categoryRoute');
 const productRoute = require('./routes/productRoute');
 const doctorRoute = require('./routes/doctorRoute');
 const labRoute = require('./routes/labRoute');
+const searchRoute = require('./routes/searchRoute');
 
 
 
@@ -27,7 +28,7 @@ app.use('/api/category', categoryRoute);
 app.use('/api/products', productRoute);
 app.use('/api/doctors', doctorRoute);
 app.use('/api/labs',labRoute);
-
+app.use('/api/',searchRoute)
 
 
 mongoose.connect(process.env.MONGO_URI,{ssl:true})

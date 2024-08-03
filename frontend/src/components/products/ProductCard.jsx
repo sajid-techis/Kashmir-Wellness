@@ -2,7 +2,7 @@ import { Button } from 'flowbite-react';
 import React from 'react';
 import { FaCartPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import {HiShoppingCart} from 'react-icons/hi'
+
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate()

@@ -3,6 +3,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/common/Header';
+import MobileNavBar from '../components/common/MobileNavBar';
 
 
 
@@ -13,6 +14,7 @@ const Layout = () => {
         <main className="flex-1 ">
           <Outlet />
         </main>
+        <MobileNavBar/>
       </div>
   );
 };

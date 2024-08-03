@@ -29,7 +29,6 @@ const Profile = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-custom-gradient">
-            <Header />
             <div className="flex justify-center items-center flex-1 p-4">
                 <div className="max-w-lg w-full bg-white shadow-2xl rounded-xl overflow-hidden">
                     <div className="bg-cover bg-center h-48" style={{ backgroundImage: `url(${userInfo?.image || 'default-background.jpg'})` }}>

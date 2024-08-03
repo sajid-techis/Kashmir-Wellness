@@ -13,7 +13,7 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
               placeholder="Search here..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="border-0 p-2 rounded w-full  outline-none"
+              className="border border-primary p-2 rounded w-full  outline-none"
             />
             <FaSearch className="absolute top-1/2 right-2 transform -translate-y-1/2 text-lg text-primary" />
           </div>

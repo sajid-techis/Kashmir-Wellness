@@ -34,11 +34,11 @@ router.get('/specialties', async (req, res) => {
 // routes/doctorRoutes.js
 router.get('/featured', async (req, res) => {
   try {
-    const limit = 6; // Number of random doctors to return
+    const limit = 6; 
 
     // Aggregation pipeline to sample random doctors
     const featuredDoctors = await Doctor.aggregate([
-      { $sample: { size: limit } } // Randomly select `size` number of documents
+      { $sample: { size: limit } } 
     ]);
 
     res.status(200).json({ message: "Featured doctors retrieved successfully", featuredDoctors });

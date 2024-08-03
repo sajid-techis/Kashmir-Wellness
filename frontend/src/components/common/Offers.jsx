@@ -4,12 +4,22 @@ import deliveryIcon from '../../assets/images/dilivery-icon.png';
 import doctorIcon from '../../assets/images/doctor-icon.png';
 import healthIcon from '../../assets/images/health-icon.png';
 import rightIcon from '../../assets/images/right-arrow-icon.png';
+import { useNavigate } from 'react-router-dom';
 
 const Offers = () => {
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/search')
+  }
+
+
+
   return (
     <div className='w-[90%] mx-auto gap-4 flex flex-wrap justify-between items-center sm:w-[80%]'>
       <div className='flex justify-between items-center bg-offer p-4 rounded-lg w-[calc(50%-1rem)] md:w-[calc(25%-1rem)]'>
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-4' onClick={handleClick}>
           <img src={offerIcon} alt="discount-icon" className='w-8 h-8 md:w-10 md:h-10' />
           <p className='text-sm md:text-lg font-bold'>Get 25% <br /> OFF</p>
         </div>

@@ -30,8 +30,8 @@ const Labs = () => {
   );
 
   return (
-    <div className="w-[95%] mx-auto my-20">
-      <div className="fixed top-14 left-0 right-0 z-20 bg-primary p-4 flex  justify-between items-center w-full">
+    <div className="w-full mx-auto ">
+      <div className="sticky top-0 left-0 right-0 z-20  p-4 flex  justify-between items-center w-full bg-custom-gradient">
         <h2 className="text-3xl font-bold text-white">Browse Labs</h2>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       </div>
@@ -49,7 +49,7 @@ const Labs = () => {
         <p className="text-center text-red-500">Error: {error}</p>
       )}
       {status === "Success" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-40">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 px-4 pb-20">
           {filteredLabs.map((lab) => (
             <div
               key={lab._id}
