@@ -5,6 +5,8 @@ import productReducer from './features/products/productSlice'
 import doctorReducer from './features/doctors/doctorSlice';
 import labReducer from './features/labs/labSlice';
 import searchReducer from './features/search/searchSlice'
+import cartReducer from './features/carts/cartSlice'
+
 
 
 const store = configureStore({
@@ -15,6 +17,7 @@ const store = configureStore({
         doctor: doctorReducer,
         lab: labReducer,
         search: searchReducer,
+        cart: cartReducer,
     }
 })
 

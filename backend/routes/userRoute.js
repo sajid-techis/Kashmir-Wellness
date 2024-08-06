@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
         await user.save();
 
         // Generate JWT token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
         // Send response with success message and token
         res.status(201).json({
@@ -49,7 +49,7 @@ router.post('/login', async (req,res) => {
         if (!isMatch)
             return res.status(404).json({Message:'Invalid Password'})
 
-        const token = jwt.sign({id: user._id},process.env.JWT_SECRET,{expiresIn:'1h'});
+        const token = jwt.sign({id: user._id},process.env.JWT_SECRET);
         res.json({token})
     } catch (error) {
         res.status(400).json({error: error.message})

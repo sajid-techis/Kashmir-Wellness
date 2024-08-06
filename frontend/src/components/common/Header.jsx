@@ -1,26 +1,44 @@
-import React from "react";
-import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
-import { useSelector } from "react-redux";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { FaShoppingCart } from 'react-icons/fa';
 import logo from "../../assets/images/Logo2.png";
 import LogoutButton from "../users/LogoutButton";
-
+import { getCartItemsThunk } from '../../features/carts/cartSlice';
 
 const Header = () => {
   const { userInfo, token } = useSelector((state) => state.user);
+  const cartItems = useSelector((state) => state.cart.items || []);
   const isAuthenticated = !!token;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getCartItemsThunk());
+    }
+  }, [dispatch, token]);
+
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const handleCartClick = () => {
+    if (isAuthenticated) {
+      navigate('/cart');
+    } else {
+      navigate('/login');
+    }
+  };
 
   const handleProfile = () => {
     navigate("/profile");
   };
 
   return (
-    <>
     <Navbar
       fluid
       rounded
-      className=" bg-white shadow-lg"
+      className="bg-white shadow-lg"
     >
       <Navbar.Brand href="/">
         <img src={logo} className="mr-3 h-6 sm:h-9 rounded-full" alt="Logo" />
@@ -28,23 +46,19 @@ const Header = () => {
           Kashmir Wellness
         </span>
       </Navbar.Brand>
-      <div className="flex md:order-2">
+      <div className="flex md:order-2 items-center space-x-4">
         {isAuthenticated && userInfo ? (
-          <Dropdown className="z-50"
-            arrowIcon={false}
-            inline
-            label={
-              <Avatar
-                alt="User settings"
-                img={
-                  userInfo.image ||
-                  "https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                }
-                rounded
-              />
-            }
-          >
-            <Dropdown.Header >
+          <Dropdown className="z-50" arrowIcon={false} inline label={
+            <Avatar
+              alt="User settings"
+              img={
+                userInfo.image ||
+                "https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+              }
+              rounded
+            />
+          }>
+            <Dropdown.Header>
               <span className="flex items-center gap-2">
                 <svg
                   className="w-6 h-6 text-primary dark:text-white"
@@ -61,7 +75,6 @@ const Header = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-
                 <p>{userInfo.name}</p>
               </span>
             </Dropdown.Header>
@@ -83,6 +96,20 @@ const Header = () => {
             </Button>
           </div>
         )}
+        <div className="relative  items-center hidden lg:flex">
+          <Button
+            gradientMonochrome="success"
+            className="bg-primary text-xs md:text-sm lg:text-base"
+            onClick={handleCartClick}
+          >
+            <FaShoppingCart className="text-lg md:text-xl" />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {cartItemCount}
+              </span>
+            )}
+          </Button>
+        </div>
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
@@ -130,8 +157,6 @@ const Header = () => {
         )}
       </Navbar.Collapse>
     </Navbar>
-    
-    </>
   );
 };
 

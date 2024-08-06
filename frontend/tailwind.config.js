@@ -16,6 +16,7 @@ module.exports = {
         delivery:"rgba(244,210,120,0.3)",
         doctor: "rgba(111,214,0,0.6)",
         health: "#EDCFFC",
+        light:"#2779bd",
         'primary-light': '#6cb2eb',
         'primary-dark': '#2779bd',
         gradient:'linear-gradient(to right, #34D399, #22C55E, #16A34A)'

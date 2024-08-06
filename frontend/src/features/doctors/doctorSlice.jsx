@@ -10,7 +10,7 @@ export const getSpecialtiesThunk = createAsyncThunk('/doctors/fetchSpecialties',
     }
 })
 
-export const getDoctorsBySpecialtiesThunk = createAsyncThunk('/doctors/fetchDoctorsBySpecialty', async (specialty,) => {
+export const getDoctorsBySpecialtiesThunk = createAsyncThunk('/doctors/fetchDoctorsBySpecialty', async (specialty) => {
     try {
         const doctors = await getDoctorsBySpecialties(specialty);
         return doctors;

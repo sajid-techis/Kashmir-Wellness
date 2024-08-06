@@ -51,9 +51,9 @@ const SpecialtiesList = () => {
   };
 
   return (
-    <div className="w-[95%] mx-auto my-20">
-      <h2 className="text-3xl font-extrabold mb-4 text-primary">
-        Browse Doctors
+    <div className="w-full mx-auto mb-20 ">
+      <h2 className="text-xl font-extrabold py-8 text-center text-white bg-custom-gradient sticky top-0 md:text-3xl" >
+        Browse Doctors By Categories
       </h2>
       {status === "Loading" && (
         <div>
@@ -69,7 +69,7 @@ const SpecialtiesList = () => {
       )}
       {status === "Failed" && <p className="text-red-500">Error: {error}</p>}
       {status === "Success" && (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-6">
+        <div className="grid mx-2 my-8 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-6 lg:mx-8">
           {specialties && specialties.length > 0 ? (
             specialties.map((specialty) => (
               <div

@@ -14,6 +14,7 @@ import Categories from "./components/products/Categories";
 import SpecialtiesList from "./components/doctors/SpecialtiesList";
 import Labs from "./components/labs/Labs";
 import TestSearchPage from "./containers/TestSearchPage";
+import Cart from "./components/carts/Cart";
 
 const Router = () => {
   return (
@@ -26,6 +27,7 @@ const Router = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/search" element={<TestSearchPage />} />
           <Route path="/products" element={<ProductsList />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/specialty" element={<SpecialtiesList />} />

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUserThunk } from "../../features/users/userSlice";
 import axios from "axios";
 import { Button, Spinner } from "flowbite-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUserThunk } from "../../features/users/userSlice";
 
 
 const api = axios.create({
@@ -75,7 +75,7 @@ const Register = () => {
     <div className="min-h-screen flex flex-col items-center justify-center bg-custom-gradient p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full space-y-6 transform transition-all duration-300 hover:scale-105"
+        className="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full space-y-6 "
       >
         <h2 className="text-3xl font-extrabold text-center text-gray-900">
           Create an Account
@@ -172,8 +172,11 @@ const Register = () => {
         >
           {status === "loading" ? <Spinner size="sm" /> : "Register"}
         </Button>
+        <div className='flex items-center justify-center gap-2 my-4'>
+        <p>Don't have An Account</p>
+        <Link to='/login' className='text-blue-500'>Login Here</Link>
+        </div>
       </form>
-
       {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
   );

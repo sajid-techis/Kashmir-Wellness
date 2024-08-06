@@ -3,17 +3,27 @@ import { getUserProfile, loginUser, registerUser } from "./userApi";
 import { toast } from "react-toastify";
 
 
-export const registerUserThunk = createAsyncThunk ('/user/register',
-   async (userData, {rejectWithValue}) => {
-    try {
+export const registerUserThunk = createAsyncThunk(
+    '/user/register',
+    async (userData, { rejectWithValue }) => {
+      try {
         const response = await registerUser(userData);
-        toast.success("Registration Successful")
+        toast.success('Registration Successful');
+  
+        // Extract token from response
+        const { token } = response;
+        
+        // Store token in localStorage
+        localStorage.setItem('token', token);
+  
         return response;
-    } catch(error) {
+      } catch (error) {
         toast.error(error.response?.data?.error || 'Registration failed!');
         return rejectWithValue(error.message);
+      }
     }
-})
+  );
+  
 
 export const loginUserThunk = createAsyncThunk('/users/login', async (userData, {rejectWithValue}) => {
     try {

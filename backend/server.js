@@ -10,6 +10,10 @@ const productRoute = require('./routes/productRoute');
 const doctorRoute = require('./routes/doctorRoute');
 const labRoute = require('./routes/labRoute');
 const searchRoute = require('./routes/searchRoute');
+const cartRoute = require('./routes/cartRoute');
+
+
+
 
 
 
@@ -28,7 +32,11 @@ app.use('/api/category', categoryRoute);
 app.use('/api/products', productRoute);
 app.use('/api/doctors', doctorRoute);
 app.use('/api/labs',labRoute);
-app.use('/api/',searchRoute)
+app.use('/api/',searchRoute);
+app.use('/api/cart',cartRoute)
+
+
+
 
 
 mongoose.connect(process.env.MONGO_URI,{ssl:true})

@@ -1,9 +1,9 @@
 // components/Categories.jsx
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getCategoriesThunk } from '../../features/categories/categorySlice';
-import { FidgetSpinner } from 'react-loader-spinner';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getCategoriesThunk } from "../../features/categories/categorySlice";
+import { FidgetSpinner } from "react-loader-spinner";
 import { RiMedicineBottleFill } from "react-icons/ri";
 import { FaUserNurse, FaHeart, FaBaby, FaFirstAid } from "react-icons/fa";
 import { FaCapsules } from "react-icons/fa6";
@@ -50,18 +50,29 @@ const Categories = () => {
     navigate(`/products?category=${categoryId}`);
   };
 
-  if (status === 'Loading') {
-    return <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />;
+  if (status === "Loading") {
+    return (
+      <FidgetSpinner
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="fidget-spinner-loading"
+      />
+    );
   }
 
-  if (status === 'Failed') {
+  if (status === "Failed") {
     return <p>Error: {error}</p>;
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto my-20 px-4">
-      <h1 className="text-3xl font-bold text-primary">Browse Categories</h1>
-      <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="w-full">
+      <div className="bg-custom-gradient  sticky top-0 z-10">
+        <h1 className="text-xl font-bold text-white text-center py-8  lg:text-3xl">
+          Browse Products By Categories
+        </h1>
+      </div>
+      <div className="mx-4 my-8 pb-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {categories.map((category) => (
           <div
             key={category._id}
@@ -76,9 +87,9 @@ const Categories = () => {
             <div className="absolute top-2 left-2 bg-primary rounded-full p-2">
               {getIconForCategory(category.name)}
             </div>
-            <div className='px-4 pb-4'>
-            <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
-            <p>{category.description}</p>
+            <div className="px-4 pb-4">
+              <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
+              <p>{category.description}</p>
             </div>
           </div>
         ))}

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getUserProfileThunk } from '../../features/users/userSlice';
-import Header from '../common/Header';
 import { toast } from 'react-toastify';
 
 const Profile = () => {
