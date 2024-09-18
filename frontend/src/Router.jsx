@@ -15,6 +15,9 @@ import SpecialtiesList from "./components/doctors/SpecialtiesList";
 import Labs from "./components/labs/Labs";
 import TestSearchPage from "./containers/TestSearchPage";
 import Cart from "./components/carts/Cart";
+import BookAppointment from "./components/appointments/BookAppointment";
+import DoctorAppointments from "./components/doctors/AppointmentDetails";
+import UserAppointments from "./components/appointments/UserAppointments";
 
 const Router = () => {
   return (
@@ -32,8 +35,11 @@ const Router = () => {
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/specialty" element={<SpecialtiesList />} />
           <Route path="/specialty/:specialty" element={<DoctorList />} />
+          <Route path="/book-appointment/:doctorId" element={<BookAppointment />} />
           <Route path="/labs" element={<Labs />} />
           <Route path="/labs/:id" element={<LabDetails />} />
+          <Route path="/appointment-details/:appointmentId" element={<DoctorAppointments />} />
+          <Route path="/user/:patientId/appointments" element={<UserAppointments />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -16,10 +16,13 @@ const LogoutButton = () => {
     };
 
     return (
-        <button onClick={handleLogout} className="text-primary hover:text-secondary transition-all ease-in-out">
+        <a onClick={handleLogout} className="text-primary hover:text-secondary transition-all ease-in-out">
             Sign out
-        </button>
+        </a>
     );
 };
 
 export default LogoutButton;
+
+
+

@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { getDoctorsBySpecialties, getFeaturedDoctors, getSpecialties } from './doctorApi';
+import { bookAppointment, getAppointmentsByDoctor, getDoctor, getDoctorsBySpecialties, getFeaturedDoctors, getSpecialties } from './doctorApi';
 
 export const getSpecialtiesThunk = createAsyncThunk('/doctors/fetchSpecialties', async () => {
     try {
@@ -28,55 +28,120 @@ export const getFeaturedDoctorsThunk = createAsyncThunk('/doctors/fetchFeatured'
     }
 })
 
+export const bookAppointmentThunk = createAsyncThunk(
+    '/doctors/bookAppointment',
+    async ({ doctorId, patientData }, { rejectWithValue }) => {
+      try {
+        const appointment = await bookAppointment(doctorId, patientData);
+        return appointment;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+  );
 
-const doctorSlice = createSlice({
+  export const getDoctorDetailsThunk = createAsyncThunk(
+    '/doctors/fetchDoctorDetails',
+    async (doctorId) => {
+      try {
+        const response = await getDoctor(doctorId);
+        return response; // Return the whole doctor object
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    }
+  );
+  
+  // Create a thunk for fetching doctor appointments
+export const getAppointmentsByDoctorThunk = createAsyncThunk(
+  '/doctors/fetchAppointmentsByDoctor',
+  async (doctorId, { rejectWithValue }) => {
+      try {
+          const appointments = await getAppointmentsByDoctor(doctorId);
+          return appointments;
+      } catch (error) {
+          return rejectWithValue(error.message);
+      }
+  }
+);
+
+  
+
+
+  const doctorSlice = createSlice({
     name: 'Doctor',
     initialState: {
-        featuredDoctors: [],
-        specialties: [],
-        doctors:[],
-        status: 'idle',
-        error: null
+      featuredDoctors: [],
+      specialties: [],
+      doctors: [],
+      appointments: [],
+      doctor: null,
+      status: 'idle',
+      error: null,
+      appointmentStatus: 'idle', // Track appointment status
+      appointmentError: null,    // Track appointment error
     },
-    reducers:{},
+    reducers: {},
     extraReducers: (builder) => {
-        builder
-        .addCase(getSpecialtiesThunk.pending,(state) => {
-            state.status = "Loading"
+      builder
+        .addCase(getSpecialtiesThunk.pending, (state) => {
+          state.status = 'Loading';
         })
-        .addCase(getSpecialtiesThunk.fulfilled,(state,action) => {
-            state.status = "Success"
-            state.specialties = action.payload
+        .addCase(getSpecialtiesThunk.fulfilled, (state, action) => {
+          state.status = 'Success';
+          state.specialties = action.payload;
         })
-        .addCase(getSpecialtiesThunk.rejected,(state,action) => {
-            state.status = "Failed"
-            state.error = action.payload
+        .addCase(getSpecialtiesThunk.rejected, (state, action) => {
+          state.status = 'Failed';
+          state.error = action.payload;
         })
-        .addCase(getDoctorsBySpecialtiesThunk.pending,(state) => {
-            state.status = "Loading"
+        .addCase(getDoctorsBySpecialtiesThunk.pending, (state) => {
+          state.status = 'Loading';
         })
-        .addCase(getDoctorsBySpecialtiesThunk.fulfilled,(state,action) => {
-            state.status ="Success"
-            state.doctors = action.payload;
+        .addCase(getDoctorsBySpecialtiesThunk.fulfilled, (state, action) => {
+          state.status = 'Success';
+          state.doctors = action.payload;
         })
-        .addCase(getDoctorsBySpecialtiesThunk.rejected,(state,action) => {
-            state.status = "Failed"
-            state.error = action.payload;
+        .addCase(getDoctorsBySpecialtiesThunk.rejected, (state, action) => {
+          state.status = 'Failed';
+          state.error = action.payload;
         })
-        .addCase(getFeaturedDoctorsThunk.pending,(state) => {
-            state.status = "Loading"
+        .addCase(getFeaturedDoctorsThunk.pending, (state) => {
+          state.status = 'Loading';
         })
-        .addCase(getFeaturedDoctorsThunk.fulfilled,(state,action) => {
-            state.status = "Success"
-            state.featuredDoctors = action.payload;
+        .addCase(getFeaturedDoctorsThunk.fulfilled, (state, action) => {
+          state.status = 'Success';
+          state.featuredDoctors = action.payload;
         })
-        .addCase(getFeaturedDoctorsThunk.rejected,(state,action) => {
-            state.status = "Failed"
-            state.error = action.payload;
+        .addCase(getFeaturedDoctorsThunk.rejected, (state, action) => {
+          state.status = 'Failed';
+          state.error = action.payload;
         })
-    }
-})
-
+        .addCase(getDoctorDetailsThunk.pending, (state) => {
+          state.status = 'Loading';
+        })
+        .addCase(getDoctorDetailsThunk.fulfilled, (state, action) => {
+          state.status = 'Success';
+          state.doctor = action.payload;
+        })
+        .addCase(getDoctorDetailsThunk.rejected, (state, action) => {
+          state.status = 'Failed';
+          state.error = action.payload;
+        })
+        .addCase(getAppointmentsByDoctorThunk.pending, (state) => {
+          state.status = 'Loading';
+      })
+      .addCase(getAppointmentsByDoctorThunk.fulfilled, (state, action) => {
+          state.status = 'Success';
+          state.appointments = action.payload; // Store the fetched appointments
+      })
+      .addCase(getAppointmentsByDoctorThunk.rejected, (state, action) => {
+          state.status = 'Failed';
+          state.error = action.payload;
+      });
+    },
+  });
+  
 export default doctorSlice.reducer;
 
 

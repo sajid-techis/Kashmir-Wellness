@@ -32,3 +32,33 @@ export const getDoctorsBySpecialties = async (specialty) => {
     }
 } 
 
+export const bookAppointment = async (doctorId, patientData) => {
+    try {
+        const response = await api.post(`/appointments/${doctorId}/book-appointment`, patientData);
+        return response.data.appointment;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+export const getDoctor = async (doctorId) => {
+    try {
+        const response = await api.get(`/doctors/${doctorId}`);
+        console.log(response.data.doctor)
+        return response.data.doctor;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+export const getAppointmentsByDoctor = async (doctorId) => {
+    try {
+        const response = await api.get(`/doctors/${doctorId}/appointments`);
+        return response.data.appointments;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+

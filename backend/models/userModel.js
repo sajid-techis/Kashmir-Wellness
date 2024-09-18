@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 
 
+
 const userSchema = new mongoose.Schema({
     name: {type:String,required:true},
     email: {type:String,required:true},
@@ -11,7 +12,8 @@ const userSchema = new mongoose.Schema({
     address: {type:String,required:true},
     city: {type:String,required:true},
     state: {type:String,required:true},
-    image:{type: String}
+    image:{type: String},
+    appointments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }]
 },{timestamps:true})
 
 userSchema.pre('save', async function(next){

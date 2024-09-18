@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getUserProfileThunk } from '../../features/users/userSlice';
 import { toast } from 'react-toastify';
+import UserAppointments from '../appointments/UserAppointments';
+
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -55,6 +57,11 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Render UserAppointments */}
+            <div className="p-4 pb-24">
+                <UserAppointments patientId={userInfo?._id} />
             </div>
         </div>
     );

@@ -22,7 +22,7 @@ const UniversalSearch = () => {
 
   return (
     <div className="w-full lg:max-w-xl mx-auto my-0 sticky top-0 z-30">
-      <div className="bg-custom-gradient shadow-md p-4 lg:bg-none lg:shadow-none">
+      <div className="bg-custom-gradient shadow-md p-4 ">
         <div className="relative">
           <input
             type="text"

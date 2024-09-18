@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getDoctorsBySpecialtiesThunk } from "../../features/doctors/doctorSlice";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SearchBar from '../common/SearchBar'; 
 import SpecialtiesSidebar from "./SpecialtiesSidebar";
 
@@ -12,6 +12,7 @@ const DoctorList = () => {
   const status = useSelector((state) => state.doctor.status);
   const error = useSelector((state) => state.doctor.error);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(getDoctorsBySpecialtiesThunk(specialty));
@@ -22,6 +23,12 @@ const DoctorList = () => {
     doctor.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doctor.qualification.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleBookAppointment = (doctorId) => {
+    // Navigate to the booking page or open a modal with the doctorId
+    navigate(`/book-appointment/${doctorId}`);
+  };
+
 
   return (
     <div className="w-full">
@@ -63,6 +70,14 @@ const DoctorList = () => {
                         <h4 className="text-md font-semibold text-gray-900">Availability:</h4>
                         <p className="text-gray-700">Days: {doctor.availability.days.join(", ")}</p>
                         <p className="text-gray-700">Hours: {doctor.availability.hours.join(", ")}</p>
+                      </div>
+                      <div className="mt-4">
+                        <button
+                          onClick={() => handleBookAppointment(doctor._id)}
+                          className="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-dark transition duration-300"
+                        >
+                          Book Appointment
+                        </button>
                       </div>
                     </div>
                   </div>
