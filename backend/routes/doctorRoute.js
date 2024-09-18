@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Doctor = require('../models/doctorModel'); // Use Doctor instead of doctor
+const Doctor = require('../models/doctorModel'); 
+const Appointment = require('../models/appointmentModel');
+const User = require('../models/userModel');
+
 
 // Create a new doctor
 router.post('/create', async (req, res) => {
@@ -60,6 +63,21 @@ router.get('/by-specialty/:specialty', async (req, res) => {
   }
 });
 
+// Fetch doctor details including availability
+router.get('/:doctorId', async (req, res) => {
+  try {
+    const { doctorId } = req.params;
+    const doctor = await Doctor.findById(doctorId);
+
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor Not Found" });
+    }
+
+    res.status(200).json({ message: "Doctor details retrieved successfully", doctor });
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving doctor details", error: error.message });
+  }
+});
 
 module.exports = router;
 

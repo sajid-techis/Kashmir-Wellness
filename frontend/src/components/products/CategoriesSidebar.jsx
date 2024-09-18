@@ -4,34 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getCategoriesThunk } from '../../features/categories/categorySlice';
 import { FidgetSpinner } from 'react-loader-spinner';
-import { RiMedicineBottleFill } from "react-icons/ri";
-import { FaUserNurse, FaHeart, FaBaby, FaFirstAid, FaCapsules } from "react-icons/fa";
-import { IoIosWoman, IoIosMan } from "react-icons/io";
 
-const getIconForCategory = (name) => {
-  switch (name) {
-    case "Pharma":
-      return <RiMedicineBottleFill className="text-white text-xl" />;
-    case "Personal Care":
-      return <FaUserNurse className="text-white text-xl" />;
-    case "Medical Equipment":
-      return <FaHeart className="text-white text-xl" />;
-    case "Health & Wellness":
-      return <FaCapsules className="text-white text-xl" />;
-    case "Baby Care":
-      return <FaBaby className="text-white text-xl" />;
-    case "First Aid":
-      return <FaFirstAid className="text-white text-xl" />;
-    case "Women Health":
-      return <IoIosWoman className="text-white text-xl" />;
-    case "Nutrition":
-      return <FaBaby className="text-white text-xl" />;
-    case "Men Health":
-      return <IoIosMan className="text-white text-xl" />;
-    default:
-      return null;
-  }
-};
+
+
 
 const CategoriesSidebar = () => {
   const dispatch = useDispatch();
@@ -68,7 +43,7 @@ const CategoriesSidebar = () => {
             }`}
             onClick={() => handleCategoryClick(category._id)}
           >
-            <div>
+            <div className='flex flex-col items-center'>
             <img
               src={(category.imageUrl)}
               alt={category._id}

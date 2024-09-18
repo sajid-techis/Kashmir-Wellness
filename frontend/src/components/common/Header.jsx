@@ -3,7 +3,7 @@ import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
-import logo from "../../assets/images/Logo2.png";
+import logo from "../../assets/images/Logo4.jpeg";
 import LogoutButton from "../users/LogoutButton";
 import { getCartItemsThunk } from '../../features/carts/cartSlice';
 

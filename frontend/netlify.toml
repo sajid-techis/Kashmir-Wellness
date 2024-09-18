@@ -1,0 +1,49 @@
+# netlify.toml
+
+[build]
+  # Set the build command for your React app
+  command = "npm run build"
+  
+  # Directory to deploy from
+  publish = "build"
+
+[build.environment]
+  # Environment variables can be set here
+  # For example, you might add variables like API keys or custom environment settings
+  # NODE_ENV = "production"
+  # REACT_APP_API_URL = "https://api.example.com"
+
+[context.production.environment]
+  # Production environment-specific settings
+  # Add any production-specific environment variables here
+  # NODE_ENV = "production"
+
+[context.deploy-preview.environment]
+  # Deploy Preview environment-specific settings
+  # Add any preview-specific environment variables here
+
+[context.branch-deploy.environment]
+  # Branch Deploy environment-specific settings
+  # Add any branch-specific environment variables here
+
+[[redirects]]
+  # Redirect from old URL to new URL
+  from = "/old-url"
+  to = "/new-url"
+  status = 301
+  force = true
+
+[[redirects]]
+  # Redirect all paths to the index.html for client-side routing
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[headers]]
+  # Add custom headers to your pages
+  for = "/*"
+    [headers.values]
+      X-Content-Type-Options = "nosniff"
+      X-Frame-Options = "DENY"
+      X-XSS-Protection = "1; mode=block"

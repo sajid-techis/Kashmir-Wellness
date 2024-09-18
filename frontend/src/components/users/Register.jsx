@@ -170,7 +170,7 @@ const Register = () => {
           type="submit"
           className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
         >
-          {status === "loading" ? <Spinner size="sm" /> : "Register"}
+          {status === "loading" ? <HashLoader size="sm" /> : "Register"}
         </Button>
         <div className='flex items-center justify-center gap-2 my-4'>
         <p>Don't have An Account</p>
