@@ -23,48 +23,38 @@ const FeaturedDoctors = () => {
 
   if (status === "Loading") {
     return (
-      <FidgetSpinner
-        visible={true}
-        height="80"
-        width="80"
-        ariaLabel="fidget-spinner-loading"
-      />
+      <div className="flex items-center justify-center h-full">
+        <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
+      </div>
     );
   }
-  if (status === "Failed") return <p>Error: {error}</p>;
+
+  if (status === "Failed") return <p className="text-red-500">Error: {error}</p>;
 
   return (
     <div className="w-[95%] mx-auto my-8">
-      <div className="flex justify-between items-center my-8 " >
-        <h2 className="text-3xl font-extrabold  text-primary">
-          Featured Doctors
-        </h2>
+      <div className="flex justify-between items-center my-4">
+        <h2 className="text-3xl font-bold text-primary">Featured Doctors</h2>
         <Button gradientMonochrome="success" onClick={handleView}>
           View All
         </Button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {featuredDoctors.length > 0 ? (
           featuredDoctors.map((doctor) => (
             <div
               key={doctor._id}
-              className="flex flex-col gap-2 items-start  border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
+              className="relative flex flex-col gap-2 bg-gradient-to-b from-green-700 to-blue-800 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
             >
               <img
                 src={doctor.profileImage}
                 alt={doctor.name}
-                className="w-full h-60 object-cover rounded-t-lg lg:h-60"
+                className="w-full h-40 object-cover rounded-t-lg lg:h-60"
               />
-              <div className="p-4">
-                <h2 className="text-sm font-semibold lg:text-xl">
-                  {doctor.name}
-                </h2>
-                <p className="text-sm text-primary lg:text-lg">
-                  {doctor.specialty}
-                </p>
-                <p className="text-sm text-primary lg:text-lg">
-                  {doctor.qualification}
-                </p>
+              <div className="flex-1 p-4 text-gray-100">
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold">{doctor.name}</h3>
+                <p className="text-xs sm:text-sm md:text-base">{doctor.specialty}</p>
+                <p className="text-xs sm:text-sm md:text-base">{doctor.qualification}</p>
               </div>
             </div>
           ))

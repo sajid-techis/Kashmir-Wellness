@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const FeaturedLabs = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { featuredLabs, status, error } = useSelector((state) => state.lab);
 
   useEffect(() => {
@@ -15,57 +15,39 @@ const FeaturedLabs = () => {
   }, [dispatch]);
 
   const handleView = () => {
-    navigate('/labs')
-  }
+    navigate('/labs');
+  };
 
   if (status === "Pending") {
     return (
-      <FidgetSpinner
-        visible={true}
-        height="80"
-        width="80"
-        ariaLabel="fidget-spinner-loading"
-      />
+      <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
     );
   }
 
   if (status === "Failed") {
-    return <p>{error}</p>;
+    return <p className="text-red-500">{error}</p>;
   }
 
   return (
-    <div className="w-[95%] mx-auto my-8">
-      <div className="flex justify-between items-center my-8">
-        <h2 className="text-3xl font-extrabold  text-primary">
-          Featured Labs
-        </h2>
+    <div className="w-[95%] mx-auto mt-8 pb-20">
+      <div className="flex justify-between items-center my-4">
+        <h2 className="text-3xl font-bold text-primary">Featured Labs</h2>
         <Button gradientMonochrome="success" onClick={handleView}>
           View All
         </Button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 pb-14">
-      {featuredLabs &&
-        featuredLabs.map((lab) => (
-            <div
-            key={lab._id}
-            className="flex flex-col gap-2 items-start  border rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
-          >
-            <img
-              src={lab.imageUrl} 
-              alt={lab.name}
-              className="w-full h-60 object-cover rounded-t-lg lg:h-60"
-            />
-            <div className="p-4">
-              <h2 className="text-sm font-semibold lg:text-xl">
-                {lab.name}
-              </h2>
-
-              <p className="text-sm text-primary lg:text-lg">{lab.address},{lab.city},{lab.state}</p>
-              <p className="text-sm text-primary lg:text-lg">{lab.contactNumber}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        {featuredLabs.map((lab) => (
+          <div key={lab._id} className="relative flex flex-col gap-2 bg-gradient-to-b from-green-700 to-blue-800 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer">
+            <img src={lab.imageUrl} alt={lab.name} className="w-full h-40 object-cover rounded-t-lg lg:h-60" />
+            <div className="flex-1 p-4 text-gray-100">
+              <h3 className="text-sm sm:text-base md:text-lg font-semibold">{lab.name}</h3>
+              <p className="text-xs sm:text-sm md:text-base">{lab.address}, {lab.city}, {lab.state}</p>
+              <p className="text-xs sm:text-sm md:text-base">{lab.contactNumber}</p>
             </div>
           </div>
         ))}
-        </div>
+      </div>
     </div>
   );
 };

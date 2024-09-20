@@ -5,9 +5,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { getCategoriesThunk } from '../../features/categories/categorySlice';
 import { FidgetSpinner } from 'react-loader-spinner';
 
-
-
-
 const CategoriesSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,31 +22,35 @@ const CategoriesSidebar = () => {
   };
 
   if (status === 'Loading') {
-    return <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />;
+    return (
+      <div className="flex items-center justify-center h-full">
+        <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
+      </div>
+    );
   }
 
   if (status === 'Failed') {
-    return <p>Error: {error}</p>;
+    return <p className="text-red-500">Error: {error}</p>;
   }
 
   return (
-    <div >
+    <div className="bg-gradient-to-b from-green-800 to-blue-900 w-full  p-4 max-h-screen overflow-y-auto">
       <ul>
         {categories.map((category) => (
           <li
             key={category._id}
-            className={`flex flex-col items-center text-center p-1  cursor-pointer rounded-lg hover:bg-primary-light hover:text-white ${
-              new URLSearchParams(location.search).get('category') === category._id ? 'bg-primary-dark text-white' : ''
+            className={`flex flex-col items-center text-center p-2 cursor-pointer rounded-lg transition duration-300 hover:bg-green-600 hover:text-white ${
+              new URLSearchParams(location.search).get('category') === category._id ? 'bg-green-700 text-white' : 'text-gray-200'
             }`}
             onClick={() => handleCategoryClick(category._id)}
           >
-            <div className='flex flex-col items-center'>
-            <img
-              src={(category.imageUrl)}
-              alt={category._id}
-              className="w-12 h-12 object-cover rounded-full"
-            />
-            <span className="text-xs">{category.name}</span>
+            <div className="flex flex-col items-center">
+              <img
+                src={category.imageUrl}
+                alt={category.name}
+                className="w-12 h-12 object-cover rounded-full mb-1"
+              />
+              <span className="text-xs">{category.name}</span>
             </div>
           </li>
         ))}

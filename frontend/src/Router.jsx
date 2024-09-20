@@ -18,6 +18,7 @@ import Cart from "./components/carts/Cart";
 import BookAppointment from "./components/appointments/BookAppointment";
 import DoctorAppointments from "./components/doctors/AppointmentDetails";
 import UserAppointments from "./components/appointments/UserAppointments";
+import AppointmentDetails from "./components/appointments/AppointmentDetails";
 
 const Router = () => {
   return (
@@ -40,6 +41,7 @@ const Router = () => {
           <Route path="/labs/:id" element={<LabDetails />} />
           <Route path="/appointment-details/:appointmentId" element={<DoctorAppointments />} />
           <Route path="/user/:patientId/appointments" element={<UserAppointments />} />
+          <Route path="/appointment/:appointmentId" element={<AppointmentDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

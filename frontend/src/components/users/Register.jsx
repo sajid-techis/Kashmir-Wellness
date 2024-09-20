@@ -5,9 +5,10 @@ import { Button, Spinner } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUserThunk } from "../../features/users/userSlice";
 
+const baseUrl = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
-  baseURL: "http://localhost:5001/api",
+  baseURL: baseUrl,
 });
 
 const Register = () => {
@@ -24,13 +25,15 @@ const Register = () => {
   const [state, setState] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [file, setFile] = useState(null); 
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
 
+    setFile(selectedFile);
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("image", selectedFile);
 
     setUploading(true);
 
@@ -65,21 +68,18 @@ const Register = () => {
         city,
         state,
       })
-    );
-    if (registerUserThunk.fulfilled) {
+    ).unwrap().then(() => {
       navigate("/login");
-    }
+    });
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-custom-gradient p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-green-800 to-blue-900 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-xl max-w-lg w-full space-y-6 "
+        className="bg-gradient-to-r from-green-900 to-blue-800 p-8 rounded-3xl shadow-2xl max-w-lg w-full space-y-6 text-gray-100"
       >
-        <h2 className="text-3xl font-extrabold text-center text-gray-900">
-          Create an Account
-        </h2>
+        <h2 className="text-4xl font-extrabold text-center mb-6">Create an Account</h2>
         <div className="space-y-4">
           <input
             type="text"
@@ -88,7 +88,7 @@ const Register = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="email"
@@ -97,7 +97,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="password"
@@ -106,16 +106,16 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
-            type="phone"
+            type="text"
             name="phoneNumber"
             placeholder="Phone Number"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="text"
@@ -124,7 +124,7 @@ const Register = () => {
             onChange={(e) => setAddress(e.target.value)}
             placeholder="Address"
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="text"
@@ -133,7 +133,7 @@ const Register = () => {
             onChange={(e) => setCity(e.target.value)}
             placeholder="City"
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="text"
@@ -142,7 +142,7 @@ const Register = () => {
             onChange={(e) => setState(e.target.value)}
             placeholder="State"
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <div className="relative">
             <input
@@ -159,22 +159,22 @@ const Register = () => {
             )}
           </div>
         </div>
-        {imageUrl && (
+        {file && (
           <img
-            src={imageUrl}
+            src={URL.createObjectURL(file)} // Preview the selected file
             alt="Uploaded preview"
             className="max-w-full mt-4 rounded-lg"
           />
         )}
         <Button
           type="submit"
-          className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+          className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
         >
-          {status === "loading" ? <HashLoader size="sm" /> : "Register"}
+          {status === "loading" ? <Spinner size="sm" /> : "Register"}
         </Button>
         <div className='flex items-center justify-center gap-2 my-4'>
-        <p>Don't have An Account</p>
-        <Link to='/login' className='text-blue-500'>Login Here</Link>
+          <p className="text-gray-200">Already have an account?</p>
+          <Link to='/login' className='text-blue-300 hover:underline'>Login Here</Link>
         </div>
       </form>
       {error && <p className="text-red-500 mt-4">{error}</p>}

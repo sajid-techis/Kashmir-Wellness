@@ -46,29 +46,25 @@ const Categories = () => {
   }, [dispatch]);
 
   const handleCategoryClick = (categoryId) => {
-    // Navigate to the products list filtered by the selected category
     navigate(`/products?category=${categoryId}`);
   };
 
   if (status === "Loading") {
     return (
-      <FidgetSpinner
-        visible={true}
-        height="80"
-        width="80"
-        ariaLabel="fidget-spinner-loading"
-      />
+      <div className="flex items-center justify-center h-full">
+        <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
+      </div>
     );
   }
 
   if (status === "Failed") {
-    return <p>Error: {error}</p>;
+    return <p className="text-red-500">Error: {error}</p>;
   }
 
   return (
     <div className="w-full">
-      <div className="bg-custom-gradient  sticky top-0 z-10">
-        <h1 className="text-xl font-bold text-white text-center py-8  lg:text-3xl">
+      <div className="bg-gradient-to-b from-green-800 to-blue-900 sticky top-0 z-10">
+        <h1 className="text-xl font-bold text-white text-center py-8 lg:text-3xl">
           Browse Products By Categories
         </h1>
       </div>
@@ -76,7 +72,7 @@ const Categories = () => {
         {categories.map((category) => (
           <div
             key={category._id}
-            className="relative flex flex-col items-star gap-4  bg-white text-primary rounded-lg shadow-lg"
+            className="relative flex flex-col items-start gap-4 bg-gradient-to-b from-green-700 to-blue-800 text-white rounded-lg shadow-lg transition-transform transform hover:scale-105 cursor-pointer"
             onClick={() => handleCategoryClick(category._id)}
           >
             <img

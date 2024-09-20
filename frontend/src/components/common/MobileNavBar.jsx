@@ -35,7 +35,7 @@ const MobileNavBar = () => {
   );
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white flex justify-around items-center h-16 md:hidden border-t border-light">
+    <div className="fixed bottom-0 left-0 right-0 z-max bg-white flex justify-around items-center h-16 md:hidden border-t border-light">
       <button onClick={() => handleNavigation('/products?category=66a97902f95469fc6db5a9f0')} className={`flex flex-col items-center ${getButtonClass('/products?category=66a97902f95469fc6db5a9f0')}`}>
         <MdLocalPharmacy className="text-2xl" />
         <span className="text-xs">Products</span>
