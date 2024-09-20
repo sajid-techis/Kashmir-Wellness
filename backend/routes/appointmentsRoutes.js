@@ -4,7 +4,7 @@ const Appointment = require("../models/appointmentModel");
 const Doctor = require("../models/doctorModel");
 const User = require("../models/userModel");
 
-// Book an appointment
+
 // Book an appointment
 router.post("/:doctorId/book-appointment", async (req, res) => {
   try {
