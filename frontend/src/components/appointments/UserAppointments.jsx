@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAppointmentsForPatientThunk } from "../../features/appointments/appointmentSlice";
+import { Link } from "react-router-dom";
+import { AiOutlineCalendar, AiOutlineClockCircle, AiOutlineCheckCircle } from "react-icons/ai";
 
 const UserAppointments = ({ patientId }) => {
   const dispatch = useDispatch();
   const { appointments, status, error } = useSelector(
     (state) => state.appointments
   );
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   useEffect(() => {
     if (patientId) {
@@ -16,114 +17,47 @@ const UserAppointments = ({ patientId }) => {
   }, [dispatch, patientId]);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <div className="text-center text-blue-500">Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center text-red-500">Error: {error}</div>;
   }
 
   return (
-    <div className="p-6 bg-gray-100 rounded-2xl">
-      <h2 className="text-3xl font-bold mb-6 text-center">Your Appointments</h2>
+    <div className="p-4 sm:p-6 md:p-8 bg-gray-50 rounded-2xl shadow-lg">
+      <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center text-gray-800">Your Appointments</h2>
       {appointments.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {appointments.map((appointment) => (
             <div
               key={appointment._id}
-              className="bg-white shadow-lg rounded-lg p-6 border border-gray-200"
+              className="bg-white shadow-md hover:shadow-xl rounded-lg p-4 sm:p-6 border border-gray-100 transform transition-all duration-300 hover:scale-105 ease-in-out"
             >
-              <h3 className="text-xl font-semibold mb-2 text-blue-600">
-                Appointment with {appointment.doctorId?.name || "Loading..."} 
+              <h3 className="text-xl sm:text-2xl font-semibold mb-2 text-indigo-600">
+                Appointment with {appointment.doctorId?.name || "Loading..."}
               </h3>
-              <p className="text-gray-600">
-                <strong>Date:</strong>{" "}
+              <p className="text-gray-500 flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
+                <AiOutlineCalendar /> <strong>Date:</strong>{" "}
                 {new Date(appointment.date).toLocaleDateString()}
               </p>
-              <p className="text-gray-600">
-                <strong>Time Slot:</strong> {appointment.timeSlot}
+              <p className="text-gray-500 flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
+                <AiOutlineClockCircle /> <strong>Time Slot:</strong> {appointment.timeSlot}
               </p>
-              <p className="text-gray-600">
-                <strong>Status:</strong> {appointment.status}
+              <p className="text-gray-500 flex items-center gap-1 sm:gap-2 mb-1 sm:mb-2">
+                <AiOutlineCheckCircle /> <strong>Status:</strong> {appointment.status}
               </p>
-              <button
-                onClick={() => setSelectedAppointment(appointment)}
-                className="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200"
+              <Link
+                to={`/appointment/${appointment._id}`}
+                className="mt-4 w-full inline-block bg-indigo-600 text-white py-2 px-4 rounded-lg text-center hover:bg-indigo-700 transition duration-300 ease-in-out"
               >
                 View Details
-              </button>
+              </Link>
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500">No appointments found.</p>
-      )}
-
-      {selectedAppointment && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2">
-            <h2 className="text-2xl font-bold mb-4 text-blue-600">
-              Appointment with {selectedAppointment.doctorId?.name || "Loading..."}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <img
-                  src={selectedAppointment.doctorId?.profileImage || 'default-doctor-image.jpg'}
-                  alt="Doctor"
-                  className="w-full rounded-lg mb-4"
-                />
-                <p className="text-gray-600">
-                  <strong>Specialty:</strong>{" "}
-                  {selectedAppointment.doctorId?.specialty || "N/A"}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Experience:</strong>{" "}
-                  {selectedAppointment.doctorId?.experience || "N/A"}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Qualification:</strong>{" "}
-                  {selectedAppointment.doctorId?.qualification || "N/A"}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600">
-                  <strong>Date:</strong>{" "}
-                  {new Date(selectedAppointment.date).toLocaleDateString()}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Time Slot:</strong> {selectedAppointment.timeSlot}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Clinic Name:</strong>{" "}
-                  {selectedAppointment.doctorId?.clinic?.name || "N/A"}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Clinic Address:</strong>{" "}
-                  {selectedAppointment.doctorId?.clinic?.address?.street || "N/A"},{" "}
-                  {selectedAppointment.doctorId?.clinic?.address?.city || "N/A"},{" "}
-                  {selectedAppointment.doctorId?.clinic?.address?.state || "N/A"},{" "}
-                  {selectedAppointment.doctorId?.clinic?.address?.zipCode || "N/A"}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Contact:</strong>{" "}
-                  {selectedAppointment.doctorId?.clinic?.contactNumber || "N/A"}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Status:</strong> {selectedAppointment.status}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Patient:</strong> {selectedAppointment.patientName}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setSelectedAppointment(null)}
-              className="mt-4 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-200"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <p className="text-center text-gray-400">No appointments found.</p>
       )}
     </div>
   );

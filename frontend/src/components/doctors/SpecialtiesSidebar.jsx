@@ -24,12 +24,6 @@ const getImageForSpecialty = (name) => {
       return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382379/Category-Images/orthopedics_gwqgtc.jpg";
     case "Pediatrics":
       return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382380/Category-Images/pediatrics_rhn7r0.jpg";
-    case "Pulmonology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382383/Category-Images/radiology_xmhng9.jpg";
-    case "Rheumatology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722384925/Category-Images/Rheumatology_sxz1fg.jpg";
-    case "Urology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382385/Category-Images/urology_cduirb.jpg";
     default:
       return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382368/Category-Images/cardiology_xndpjd.jpg";
   }
@@ -48,7 +42,7 @@ const SpecialtiesSidebar = () => {
   }, [dispatch]);
 
   const handleSpecialtyClick = (specialtyId) => {
-    navigate(`/specialty/${encodeURIComponent(specialtyId)}`);
+    navigate(`/specialty/${specialtyId}`);
   };
 
   const isActive = (specialtyId) => {
@@ -57,36 +51,35 @@ const SpecialtiesSidebar = () => {
 
   if (status === "Loading") {
     return (
-      <FidgetSpinner
-        visible={true}
-        height="80"
-        width="80"
-        ariaLabel="fidget-spinner-loading"
-      />
+      <div className="flex items-center justify-center h-full">
+        <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
+      </div>
     );
   }
 
   if (status === "Failed") {
-    return <p>Error: {error}</p>;
+    return <p className="text-red-500">Error: {error}</p>;
   }
 
   return (
-    <div className="">
+    <div className="bg-gradient-to-b from-green-800 to-blue-900 w-full p-4 max-h-screen overflow-y-auto">
       <ul>
         {specialties.map((specialty) => (
           <li
             key={specialty._id}
-            className={`flex flex-col items-center text-center p-1 mb-2 cursor-pointer rounded-lg ${
-              isActive(specialty._id) ? 'bg-primary-dark text-white' : 'hover:bg-primary-light hover:text-white'
+            className={`flex flex-col items-center text-center p-2 cursor-pointer rounded-lg transition duration-300 hover:bg-green-600 hover:text-white ${
+              isActive(specialty._id) ? 'bg-green-700 text-white' : 'text-gray-200'
             }`}
             onClick={() => handleSpecialtyClick(specialty._id)}
           >
-            <img
-              src={getImageForSpecialty(specialty._id)}
-              alt={specialty._id}
-              className="w-14 h-14 object-cover rounded-full"
-            />
-            <span className="text-xs lg:text-sm">{specialty._id}</span>
+            <div className="flex flex-col items-center">
+              <img
+                src={getImageForSpecialty(specialty._id)} // Ensure specialty._id matches your cases
+                alt={specialty._id}
+                className="w-12 h-12 object-cover rounded-full mb-1"
+              />
+              <span className="text-xs">{specialty._id}</span> 
+            </div>
           </li>
         ))}
       </ul>

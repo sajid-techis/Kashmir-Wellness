@@ -1,3 +1,4 @@
+// components/ProductCard.jsx
 import { Button } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
 import { FaCartPlus, FaMinus, FaPlus } from 'react-icons/fa';
@@ -61,47 +62,39 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      key={product._id}
-      className="relative flex flex-col gap-2 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
+      className="relative flex flex-col gap-2 bg-gradient-to-b from-green-700 to-blue-800 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
     >
       <img
         src={product.imageUrl}
         alt={product.name}
-        className="w-full h-40 object-contain rounded-t-lg lg:h-60"
+        className="w-full h-40 object-contain rounded-t-lg lg:h-60 pt-4"
         onClick={handleClick}
       />
-      <div className="flex-1 p-2">
-        <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-800">
-          {product.name}
-        </h3>
-        <p className="text-xs sm:text-sm md:text-base text-gray-600">
-          {product.description}
-        </p>
+      <div className="flex-1 p-4 text-gray-100">
+        <h3 className="text-lg font-semibold">{product.name}</h3>
+        <p className="text-sm">{product.description}</p>
+        <p className="text-xl font-bold text-yellow-400 mt-2">₹{product.price}</p>
       </div>
-      <div className="flex justify-between items-center p-4 gap-4">
-        <p className="text-sm md:text-base text-primary font-bold">
-          ₹{product.price}
-        </p>
+      <div className="flex justify-between items-center p-4">
         {inCart ? (
-         <div className="flex items-center gap-2 p-2">
-         <button 
-           onClick={handleDecreaseQuantity} 
-           className="flex items-center justify-center w-8 h-8 bg-red-500 text-white rounded-lg border border-gray-300 shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition ease-in-out duration-150"
-         >
-           <FaMinus className="h-5 w-5" />
-         </button>
-         <span className="text-lg font-semibold text-gray-800">{quantity}</span>
-         <button 
-           onClick={handleIncreaseCart} 
-           className="flex items-center justify-center w-8 h-8 bg-primary text-white rounded-lg border border-gray-300 shadow-sm hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400 transition ease-in-out duration-150"
-         >
-           <FaPlus className="h-5 w-5" />
-         </button>
-       </div>
-            
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={handleDecreaseQuantity} 
+              className="flex items-center justify-center w-10 h-10 bg-red-500 text-white rounded-lg shadow-sm hover:bg-red-600 transition duration-150"
+            >
+              <FaMinus />
+            </button>
+            <span className="text-lg font-semibold">{quantity}</span>
+            <button 
+              onClick={handleIncreaseCart} 
+              className="flex items-center justify-center w-10 h-10 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 transition duration-150"
+            >
+              <FaPlus />
+            </button>
+          </div>
         ) : (
           <Button gradientMonochrome="success" className="!p-0 lg:p-1 buy-now" onClick={handleAddToCart}>
-            <FaCartPlus className="mr-2 h-5 w-5 !items-center" />
+            <FaCartPlus className="mr-2" />
             Buy now
           </Button>
         )}

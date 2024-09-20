@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { bookAppointmentThunk } from '../../features/appointments/appointmentSlice'; 
 import { getDoctorDetailsThunk } from '../../features/doctors/doctorSlice';
-import { fetchAppointmentsForPatientThunk } from '../../features/appointments/appointmentSlice'; // Import the action to refetch appointments
 
 const BookAppointment = () => {
     const { doctorId } = useParams();
@@ -14,9 +13,9 @@ const BookAppointment = () => {
     const user = useSelector((state) => state.user.userInfo);
 
     const [patientData, setPatientData] = useState({
-        patientName: user?.name || "",
-        phoneNumber: '',
-        email: '',
+        patientName: user?.name || "", // Default to logged-in user's name
+        phoneNumber: '',               // New field for phone number
+        email: '',                     // New field for email
         date: '',
         timeSlot: '',
     });
@@ -24,6 +23,7 @@ const BookAppointment = () => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Fetch doctor details on component mount
     useEffect(() => {
         const fetchDoctorDetails = async () => {
             try {
@@ -38,9 +38,11 @@ const BookAppointment = () => {
         fetchDoctorDetails();
     }, [doctorId, dispatch]);
 
+    // Update available time slots when doctor info is available
     useEffect(() => {
-        if (doctor && doctor.availability) {
-            const generatedSlots = doctor.availability.hours || [];
+        if (doctor) {
+            const { availability } = doctor;
+            const generatedSlots = availability?.hours || [];
             setTimeSlots(generatedSlots);
         }
     }, [doctor]);
@@ -50,12 +52,13 @@ const BookAppointment = () => {
         setPatientData({ ...patientData, [name]: value });
     };
 
+    // Handle appointment booking
     const handleSubmit = async () => {
         const payload = {
             patientName: patientData.patientName,
             patientId: user._id,
-            phoneNumber: patientData.phoneNumber,
-            email: patientData.email,
+            phoneNumber: patientData.phoneNumber, // Include phone number in payload
+            email: patientData.email,             // Include email in payload
             date: patientData.date,
             timeSlot: patientData.timeSlot,
         };
@@ -64,8 +67,6 @@ const BookAppointment = () => {
             const response = await dispatch(bookAppointmentThunk({ doctorId, patientData: payload }));
 
             if (response.meta.requestStatus === 'fulfilled') {
-                // Refetch appointments after successful booking
-                dispatch(fetchAppointmentsForPatientThunk(user._id));
                 navigate(`/user/${user._id}/appointments`);
             } else {
                 console.error('Failed to book appointment:', response.payload?.message || 'Unknown error');
@@ -82,8 +83,9 @@ const BookAppointment = () => {
     return (
         <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4">Book an Appointment</h2>
-            <p className="mb-4">Doctor: {doctor?.name || 'Loading...'}</p>
+            <p className="mb-4">Doctor: {doctor?.name}</p>
 
+            {/* Input for patient name */}
             <input
                 name="patientName"
                 type="text"
@@ -93,6 +95,7 @@ const BookAppointment = () => {
                 className="w-full p-2 border border-gray-300 rounded mb-4"
             />
 
+            {/* Input for phone number */}
             <input
                 name="phoneNumber"
                 type="tel"
@@ -102,6 +105,7 @@ const BookAppointment = () => {
                 className="w-full p-2 border border-gray-300 rounded mb-4"
             />
 
+            {/* Input for email */}
             <input
                 name="email"
                 type="email"

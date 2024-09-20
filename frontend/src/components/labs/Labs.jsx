@@ -30,49 +30,43 @@ const Labs = () => {
   );
 
   return (
-    <div className="w-full mx-auto ">
-      <div className="sticky top-0 left-0 right-0 z-20  p-4 flex  justify-between items-center w-full bg-custom-gradient">
-        <h2 className="text-3xl font-bold text-white">Browse Labs</h2>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+    <div className="min-h-screen bg-gradient-to-b from-green-800 to-blue-900">
+      <div className="sticky top-0 left-0 right-0 z-20 bg-white p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <h2 className="text-xl md:text-3xl font-bold text-primary">Browse Labs</h2>
+        <div className="relative w-full lg:w-1/2">
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        </div>
       </div>
       {status === "Pending" && (
-        <FidgetSpinner
-          visible={true}
-          height="80"
-          width="80"
-          ariaLabel="fidget-spinner-loading"
-          wrapperStyle={{}}
-          wrapperClass="fidget-spinner-wrapper"
-        />
+        <div className="flex justify-center py-8">
+          <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
+        </div>
       )}
       {status === "Failed" && (
         <p className="text-center text-red-500">Error: {error}</p>
       )}
       {status === "Success" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 px-4 pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 overflow-y-auto px-4 pt-4 pb-20">
           {filteredLabs.map((lab) => (
             <div
               key={lab._id}
-              className="bg-white text-primary border flex flex-col gap-2 rounded-lg shadow-md pb-4 cursor-pointer"
+              className="relative flex flex-col gap-2 bg-gradient-to-b from-green-700 to-blue-800 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
               onClick={() => handleLabClick(lab._id)}
             >
               {lab.imageUrl && (
                 <img
                   src={lab.imageUrl}
                   alt={lab.name}
-                  className="w-full h-60 object-cover rounded-t-lg "
+                  className="w-full h-40 object-cover rounded-t-lg lg:h-60"
                 />
               )}
-              <h3 className="text-lg font-bold px-3">{lab.name}</h3>
-              <div>
-                <p className="text-sm px-3">
-                  {lab.address}, {lab.city}, {lab.state}
+              <div className="flex-1 p-4 text-gray-100">
+                <h3 className="text-lg font-semibold">{lab.name}</h3>
+                <p className="text-sm">{lab.address}, {lab.city}, {lab.state}</p>
+                <p className="text-sm">
+                  <span className="font-bold">Contact: </span> {lab.contactNumber}
                 </p>
               </div>
-              <p className="text-sm px-3">
-                {" "}
-                <span className="font-bold">Contact: </span> {lab.contactNumber}
-              </p>
             </div>
           ))}
         </div>

@@ -51,30 +51,23 @@ const SpecialtiesList = () => {
   };
 
   return (
-    <div className="w-full mx-auto mb-20 ">
-      <h2 className="text-xl font-extrabold py-8 text-center text-white bg-custom-gradient sticky top-0 md:text-3xl" >
-        Browse Doctors By Categories
+    <div className="w-full mx-auto mb-20">
+      <h2 className="text-xl font-extrabold py-8 text-center text-white bg-custom-gradient sticky top-0 md:text-3xl">
+        Browse Doctors By Specialties
       </h2>
       {status === "Loading" && (
-        <div>
-          <FidgetSpinner
-            visible={true}
-            height="80"
-            width="80"
-            ariaLabel="fidget-spinner-loading"
-            wrapperStyle={{}}
-            wrapperClass="fidget-spinner-wrapper"
-          />
+        <div className="flex justify-center py-8">
+          <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
         </div>
       )}
-      {status === "Failed" && <p className="text-red-500">Error: {error}</p>}
+      {status === "Failed" && <p className="text-red-500 text-center">Error: {error}</p>}
       {status === "Success" && (
         <div className="grid mx-2 my-8 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 lg:gap-6 lg:mx-8">
           {specialties && specialties.length > 0 ? (
             specialties.map((specialty) => (
               <div
                 key={specialty._id} 
-                className="bg-white text-primary border border-gray-200 rounded-lg shadow-md flex flex-col gap-1 cursor-pointer"
+                className="bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-lg shadow-lg flex flex-col gap-2 cursor-pointer transition-transform duration-300 hover:scale-105"
                 onClick={() => onSelectSpecialty(specialty._id)} 
               >
                 <img
@@ -82,14 +75,14 @@ const SpecialtiesList = () => {
                   alt={specialty._id}
                   className="w-full h-60 object-cover rounded-t-lg"
                 />
-                <h3 className="text-sm font-semibold px-4 lg:text-lg">
+                <h3 className="text-lg font-semibold px-4">
                   {specialty._id}
                 </h3>
                 <p className="text-sm px-4 pb-4">{specialty.description}</p>
               </div>
             ))
           ) : (
-            <p className="text-gray-500">No specialties available.</p>
+            <p className="text-gray-500 text-center">No specialties available.</p>
           )}
         </div>
       )}
