@@ -2,13 +2,18 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { bookAppointment, getAppointmentsForPatient } from "./appointmentApi";
 import { toast } from "react-toastify";
 
+
 // Async thunk for booking an appointment
 export const bookAppointmentThunk = createAsyncThunk(
   "appointments/book",
-  async ({ doctorId, patientData }, { rejectWithValue }) => {
+  async ({ doctorId, patientData }, { rejectWithValue, dispatch }) => {
     try {
       const response = await bookAppointment(doctorId, patientData);
       toast.success("Appointment booked successfully!");
+
+      // Refetch appointments for the patient immediately after successful booking
+      await dispatch(fetchAppointmentsForPatientThunk(patientData.patientId));
+
       return response.appointment;
     } catch (error) {
       toast.error(error.message || "Error booking appointment");
@@ -16,6 +21,7 @@ export const bookAppointmentThunk = createAsyncThunk(
     }
   }
 );
+
 
 // Async thunk for fetching patient appointments
 export const fetchAppointmentsForPatientThunk = createAsyncThunk(
@@ -38,20 +44,26 @@ const appointmentSlice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    // Optimistically add appointment to state immediately
+    addAppointmentOptimistically: (state, action) => {
+      state.appointments.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Booking an appointment
       .addCase(bookAppointmentThunk.pending, (state) => {
-        state.status = "loading";
+        state.status = "booking"; // Only for tracking if needed, not blocking the UI
       })
       .addCase(bookAppointmentThunk.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.appointments.push(action.payload); // Add the booked appointment to the state
+        // No need to push the appointment again, it's already added optimistically
       })
       .addCase(bookAppointmentThunk.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
+        // Optionally, handle rollback here if the booking failed
       })
       // Fetching appointments for a patient
       .addCase(fetchAppointmentsForPatientThunk.pending, (state) => {
@@ -68,4 +80,7 @@ const appointmentSlice = createSlice({
   },
 });
 
+export const { addAppointmentOptimistically } = appointmentSlice.actions;
 export default appointmentSlice.reducer;
+
+
