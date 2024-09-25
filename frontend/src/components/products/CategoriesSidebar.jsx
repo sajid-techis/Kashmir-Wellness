@@ -48,9 +48,9 @@ const CategoriesSidebar = () => {
               <img
                 src={category.imageUrl}
                 alt={category.name}
-                className="w-12 h-12 object-cover rounded-full mb-1"
+                className="w-10 h-10 object-cover rounded-full mb-1"
               />
-              <span className="text-xs">{category.name}</span>
+              <span className="text-xxs">{category.name}</span>
             </div>
           </li>
         ))}

@@ -38,7 +38,7 @@ const ProductsList = () => {
         </div>
       </div>
       <div className="flex">
-        <div className="w-1/3 bg-white pb-14 text-primary  max-h-screen overflow-y-scroll flex flex-col items-center lg:w-40 lg:py-8">
+        <div className="w-1/5 bg-white pb-14 text-primary  max-h-screen overflow-y-scroll flex flex-col items-center lg:w-40 lg:py-8">
           <CategoriesSidebar />
         </div>
         {/* Products Grid */}

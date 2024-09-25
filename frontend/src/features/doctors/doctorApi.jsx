@@ -5,14 +5,6 @@ const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL
 })
 
-export const getSpecialties = async () => {
-    try {
-        const response = await api.get('doctors/specialties');
-        return response.data.specialties;
-    } catch (error) {
-        throw new Error(error.message)
-    }
-}
 
 export const getFeaturedDoctors = async () => {
     try {
@@ -23,14 +15,15 @@ export const getFeaturedDoctors = async () => {
     }
 }
 
-export const getDoctorsBySpecialties = async (specialty) => {
+export const getDoctorsBySpecialties = async (specialtyId) => {
     try {
-        const response = await api.get(`/doctors/by-specialty/${specialty}`);
+        const response = await api.get(`/doctors/by-specialty/${specialtyId}`);
         return response.data.doctors;
     } catch (error) {
-        throw new Error(error.message)
+        throw new Error(error.message);
     }
-} 
+};
+
 
 export const bookAppointment = async (doctorId, patientData) => {
     try {

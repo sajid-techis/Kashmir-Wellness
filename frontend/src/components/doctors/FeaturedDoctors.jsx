@@ -4,17 +4,24 @@ import { getFeaturedDoctorsThunk } from "../../features/doctors/doctorSlice";
 import { useNavigate } from "react-router-dom";
 import { FidgetSpinner } from "react-loader-spinner";
 import { Button } from "flowbite-react";
+import { fetchSpecialtiesThunk } from "../../features/specialties/specialtySlice";
 
 const FeaturedDoctors = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { featuredDoctors, status, error } = useSelector(
-    (state) => state.doctor
-  );
-
+  const { featuredDoctors, status, error } = useSelector((state) => state.doctor);
+  const specialties = useSelector((state) => state.specialty.specialties);
+  
   useEffect(() => {
     dispatch(getFeaturedDoctorsThunk());
+    dispatch(fetchSpecialtiesThunk());
   }, [dispatch]);
+
+  // Helper function to get the specialty name by ID
+  const getSpecialtyName = (specialtyId) => {
+    const specialty = specialties.find((spec) => spec._id === specialtyId);
+    return specialty ? specialty.name : "Unknown Specialty"; // Return "Unknown Specialty" if not found
+  };
 
   const handleView = () => {
     navigate("/specialty");
@@ -53,7 +60,8 @@ const FeaturedDoctors = () => {
               />
               <div className="flex-1 p-4 text-gray-100">
                 <h3 className="text-sm sm:text-base md:text-lg font-semibold">{doctor.name}</h3>
-                <p className="text-xs sm:text-sm md:text-base">{doctor.specialty}</p>
+                {/* Get the specialty name using the helper function */}
+                <p className="text-xs sm:text-sm md:text-base">{getSpecialtyName(doctor.specialty)}</p>
                 <p className="text-xs sm:text-sm md:text-base">{doctor.qualification}</p>
               </div>
             </div>

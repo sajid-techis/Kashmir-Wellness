@@ -24,3 +24,13 @@ export const getAppointmentsForPatient = async (patientId) => {
         throw new Error(error.response?.data?.message || 'Error fetching appointments');
     }
 };
+
+// In appointmentApi.js
+export const getAppointmentsForDate = async (doctorId, date) => {
+    try {
+        const response = await api.get(`/appointments/${doctorId}/appointments?date=${date}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Error fetching appointments for date');
+    }
+};
