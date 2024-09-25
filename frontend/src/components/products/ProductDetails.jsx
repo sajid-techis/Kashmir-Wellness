@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getProductDetailsThunk } from '../../features/products/productSlice';
 import { FaShoppingCart, FaHeart } from 'react-icons/fa';
+import Slider from 'react-slick'; // Import the slider component
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -25,18 +28,44 @@ const ProductDetails = () => {
     }
 
     if (status === 'Success' && product) {
+        // Slider settings with arrows disabled
+        const settings = {
+            dots: true,
+            arrows: false, // Hide the arrows
+            infinite: product.imageUrl.length > 1, // Enable infinite only if more than 1 image
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: true,
+            autoplaySpeed: 3000,
+        };
+
         return (
             <div className="bg-gradient-to-b from-green-800 to-blue-900 min-h-screen flex items-center justify-center">
                 <div className="w-full max-w-5xl mx-auto mt-8 mb-20 px-4 sm:px-4 lg:px-8">
                     <div className="flex flex-col sm:flex-row gap-6 bg-gradient-to-r from-green-900 to-blue-800 rounded-3xl shadow-2xl p-6 md:p-8 pb-12 hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
-                        
-                        {/* Product Image */}
+
+                        {/* Product Image Slider */}
                         <div className="w-full sm:w-1/2 relative">
-                            <img 
-                                src={product.imageUrl} 
-                                alt={product.name} 
-                                className="w-full h-auto object-cover rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
-                            />
+                            <Slider {...settings}>
+                                {product.imageUrl.length > 0 ? (
+                                    product.imageUrl.map((image, index) => (
+                                        <div key={index}>
+                                            <img 
+                                                src={image} 
+                                                alt={product.name} 
+                                                className="w-full h-auto object-cover rounded-xl shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl"
+                                            />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <img
+                                        src="/path/to/placeholder-image.jpg"
+                                        alt="No image available"
+                                        className="w-full h-auto object-cover rounded-xl shadow-lg"
+                                    />
+                                )}
+                            </Slider>
                             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 rounded-xl"></div>
                         </div>
 

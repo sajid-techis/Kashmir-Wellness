@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer utilities {
     .border-ring {
       @apply relative flex flex-col items-center p-2 rounded-full border-2 border-transparent;

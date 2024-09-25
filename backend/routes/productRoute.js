@@ -5,41 +5,43 @@ const mongoose = require("mongoose");
 const Product = require("../models/productModel");
 
 // Create a new product
+// Create a new product
 router.post("/create", async (req, res) => {
   try {
-    const {
-      name,
-      description,
-      category,
-      price,
-      brand,
-      stock,
-      expirationDate,
-      prescriptionRequired,
-      imageUrl,
-      ratings 
-    } = req.body;
+      const {
+          name,
+          description,
+          category,
+          price,
+          brand,
+          stock,
+          expirationDate,
+          prescriptionRequired,
+          imageUrl, // This should now be an array of strings
+          ratings 
+      } = req.body;
 
-    const newProduct = new Product({
-      name,
-      description,
-      category,
-      price,
-      brand,
-      stock,
-      expirationDate,
-      prescriptionRequired,
-      imageUrl,
-      ratings: ratings || { averageRating: 0, numberOfRatings: 0 } // Default values
-    });
+      const newProduct = new Product({
+          name,
+          description,
+          category,
+          price,
+          brand,
+          stock,
+          expirationDate,
+          prescriptionRequired,
+          imageUrl: imageUrl || [], // Ensure this is an array, default to an empty array if not provided
+          ratings: ratings || { averageRating: 0, numberOfRatings: 0 }
+      });
 
-    const savedProduct = await newProduct.save();
+      const savedProduct = await newProduct.save();
 
-    res.status(200).json({ message: "Product saved successfully", product: savedProduct });
+      res.status(200).json({ message: "Product saved successfully", product: savedProduct });
   } catch (error) {
-    res.status(500).json({ message: "Failed to create product", error: error.message });
+      res.status(500).json({ message: "Failed to create product", error: error.message });
   }
 });
+
 
 
 // Get All Products with optional limit
@@ -110,5 +112,38 @@ router.get('/get/:id', async (req, res) => {
     res.status(500).json({ message: 'Error fetching product', error: error.message });
   }
 });
+
+// Update a product by ID
+router.put('/update/:id', async (req, res) => {
+  try {
+      const { id } = req.params;
+
+      // Validate the ID format
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ message: "Invalid product ID format" });
+      }
+
+      // Get the update data from the request body
+      const updateData = req.body;
+
+      // Find the product by ID and update it
+      const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+
+      // If no product is found, return a 404 error
+      if (!updatedProduct) {
+          return res.status(404).json({ message: "Product not found" });
+      }
+
+      // Return the updated product
+      res.status(200).json({
+          message: 'Product updated successfully',
+          product: updatedProduct
+      });
+  } catch (error) {
+      console.error("Error updating product:", error);
+      res.status(500).json({ message: 'Error updating product', error: error.message });
+  }
+});
+
 
 module.exports = router;
