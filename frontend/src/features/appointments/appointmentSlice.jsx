@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { bookAppointment, getAppointmentsForPatient } from "./appointmentApi";
+import { bookAppointment, getAppointmentsForDate, getAppointmentsForPatient } from "./appointmentApi";
 import { toast } from "react-toastify";
 
 
@@ -37,10 +37,28 @@ export const fetchAppointmentsForPatientThunk = createAsyncThunk(
   }
 );
 
+
+// In appointmentSlice.js
+export const fetchAppointmentsForDateThunk = createAsyncThunk(
+  "appointments/fetchForDate",
+  async ({ doctorId, date }, { rejectWithValue }) => {
+      try {
+          const response = await getAppointmentsForDate(doctorId, date);
+          return { appointments: response.appointments, date }; // Return both
+      } catch (error) {
+          toast.error(error.message || "Error fetching appointments for date");
+          return rejectWithValue(error.message);
+      }
+  }
+);
+
+
+
 const appointmentSlice = createSlice({
   name: "appointments",
   initialState: {
     appointments: [],
+    timeSlots: [],
     status: "idle",
     error: null,
   },
@@ -76,7 +94,13 @@ const appointmentSlice = createSlice({
       .addCase(fetchAppointmentsForPatientThunk.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      });
+      })
+      .addCase(fetchAppointmentsForDateThunk.fulfilled, (state, action) => {
+        // Access the appointments from the payload
+        const bookedSlots = action.payload.appointments.map(app => app.timeSlot);
+        const updatedSlots = state.timeSlots.filter(slot => bookedSlots.filter(b => b === slot).length < 5);
+        state.timeSlots = updatedSlots; // Update time slots based on current bookings
+    });    
   },
 });
 

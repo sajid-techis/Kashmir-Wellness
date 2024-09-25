@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { addAppointmentOptimistically, bookAppointmentThunk } from "../../features/appointments/appointmentSlice";
+import { addAppointmentOptimistically, bookAppointmentThunk, fetchAppointmentsForDateThunk } from "../../features/appointments/appointmentSlice";
 import { getDoctorDetailsThunk } from "../../features/doctors/doctorSlice";
 import Calendar from "react-calendar"; 
 import 'react-calendar/dist/Calendar.css';
@@ -26,7 +26,8 @@ const BookAppointment = () => {
   const [timeSlots, setTimeSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [availableDays, setAvailableDays] = useState([]);
-  const [isCalendarVisible, setIsCalendarVisible] = useState(false); 
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  const [fullyBookedDates, setFullyBookedDates] = useState([]);
 
   useEffect(() => {
     const fetchDoctorDetails = async () => {
@@ -51,22 +52,55 @@ const BookAppointment = () => {
     }
   }, [doctor]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setPatientData({ ...patientData, [name]: value });
-  };
 
-  const handleDateChange = (date) => {
-    const selectedDate = date.toLocaleDateString("en-US", { weekday: "long" });
+  
 
-    if (availableDays.includes(selectedDate)) {
-      const formattedDate = date.toLocaleDateString('en-CA');
-      console.log("Selected date:", formattedDate);
-      setPatientData({ ...patientData, date: formattedDate });
+  const handleDateChange = async (date) => {
+    const selectedDate = date.toLocaleDateString('en-CA');
+    const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+  
+    if (availableDays.includes(dayName)) {
+      setPatientData({ ...patientData, date: selectedDate });
       setIsCalendarVisible(false);
+  
+      // Reset time slots to the initial state before fetching appointments
+      setTimeSlots(doctor.availability?.hours || []);
+  
+      // Fetch appointments for the selected date
+      const action = await dispatch(fetchAppointmentsForDateThunk({ doctorId, date: selectedDate }));
+      if (fetchAppointmentsForDateThunk.fulfilled.match(action)) {
+        filterTimeSlots(action.payload.appointments);
+      }
     } else {
       alert("This date is not available for booking.");
     }
+  };
+  
+  const filterTimeSlots = (appointments) => {
+    const bookedSlots = appointments.map(app => app.timeSlot);
+    
+    // Filter out the time slots that are booked
+    const updatedSlots = timeSlots.filter(slot => {
+      const count = bookedSlots.filter(b => b === slot).length;
+      return count < 5; // Keep slots with less than 5 bookings
+    });
+  
+    setTimeSlots(updatedSlots);
+  
+    // Update fully booked dates
+    if (updatedSlots.length === 0) {
+      setFullyBookedDates(prev => [...new Set([...prev, patientData.date])]); // Add to fully booked if no slots available
+    } else {
+      // Make sure to clear the date from fully booked if it has available slots
+      setFullyBookedDates(prev => prev.filter(date => date !== patientData.date));
+    }
+  };
+  
+  
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPatientData({ ...patientData, [name]: value });
   };
 
   const handleSubmit = async () => {
@@ -95,9 +129,13 @@ const BookAppointment = () => {
     const today = new Date();
     const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const comparisonDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-    return comparisonDate < currentDate || !availableDays.includes(dayName);
+  
+    return comparisonDate < currentDate || 
+           !availableDays.includes(dayName) || 
+           fullyBookedDates.includes(date.toLocaleDateString('en-CA'));
   };
+  
+  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -171,7 +209,6 @@ const BookAppointment = () => {
             </option>
           ))}
         </select>
-
         <button
           onClick={handleSubmit}
           className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200"

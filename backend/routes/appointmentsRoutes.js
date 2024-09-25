@@ -3,6 +3,7 @@ const router = express.Router();
 const Appointment = require("../models/appointmentModel");
 const Doctor = require("../models/doctorModel");
 const User = require("../models/userModel");
+const moment = require('moment');
 
 
 // Book an appointment
@@ -31,14 +32,15 @@ router.post("/:doctorId/book-appointment", async (req, res) => {
       return res.status(400).json({ message: "Time Slot Not Available" });
     }
 
-    // Check if the time slot is already booked
-    const isSlotBooked = await Appointment.findOne({
+    // Check how many appointments are already booked in that time slot
+    const appointmentCount = await Appointment.countDocuments({
       doctorId,
       date,
       timeSlot,
     });
-    if (isSlotBooked) {
-      return res.status(400).json({ message: "Time Slot Already Booked" });
+
+    if (appointmentCount >= 5) {
+      return res.status(400).json({ message: "Time Slot is Full" });
     }
 
     // Create the new appointment
@@ -74,18 +76,29 @@ router.post("/:doctorId/book-appointment", async (req, res) => {
       error: error.message,
     });
   }
-});  
+});
+
 
 // Get appointments for a doctor
 router.get("/:doctorId/appointments", async (req, res) => {
   try {
     const { doctorId } = req.params;
-    const appointments = await Appointment.find({ doctorId })
+    const { date } = req.query;
+
+    // Convert the date string to a Date object
+    const selectedDate = new Date(date);
+    const startDate = new Date(selectedDate.setHours(0, 0, 0, 0));
+    const endDate = new Date(selectedDate.setHours(23, 59, 59, 999));
+
+    const appointments = await Appointment.find({
+      doctorId,
+      date: { $gte: startDate, $lte: endDate }
+    })
       .populate({
         path: "patientId",
-        select: "name email phoneNumber", // Specify the fields you want from User
+        select: "name email phoneNumber",
       })
-      .populate("doctorId"); // Populate doctor details
+      .populate("doctorId");
 
     res.status(200).json({
       message: "Appointments Retrieved Successfully",
@@ -98,6 +111,8 @@ router.get("/:doctorId/appointments", async (req, res) => {
     });
   }
 });
+
+
 
 // Get appointments for a patient
 // Get appointments for a patient

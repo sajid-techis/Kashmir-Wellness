@@ -53,7 +53,7 @@ const MobileNavBar = () => {
         <FaUser className="text-2xl" />
         <span className="text-xs">Profile</span>
       </button>
-      <button onClick={() => handleNavigation('/specialty/Gastroenterology')} className={`flex flex-col items-center ${getButtonClass('/specialty/Gastroenterology')}`}>
+      <button onClick={() => handleNavigation('/specialty/66f0d8ab9ace5a705480eb1f')} className={`flex flex-col items-center ${getButtonClass('/specialty/66f0d8ab9ace5a705480eb1f')}`}>
         <FaUserMd className="text-2xl" />
         <span className="text-xs">Doctors</span>
       </button>

@@ -84,7 +84,7 @@ const ProductCard = ({ product }) => {
             >
               <FaMinus />
             </button>
-            <span className="text-lg font-semibold">{quantity}</span>
+            <span className="text-lg font-semibold text-white">{quantity}</span>
             <button 
               onClick={handleIncreaseCart} 
               className="flex items-center justify-center w-10 h-10 bg-green-600 text-white rounded-lg shadow-sm hover:bg-green-700 transition duration-150"

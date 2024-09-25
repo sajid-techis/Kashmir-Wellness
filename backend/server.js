@@ -12,7 +12,7 @@ const labRoute = require('./routes/labRoute');
 const searchRoute = require('./routes/searchRoute');
 const cartRoute = require('./routes/cartRoute');
 const appointmentRoutes = require('./routes/appointmentsRoutes');
-
+const specialtyRoutes = require('./routes/specialtyRoute'); 
 
 
 
@@ -36,6 +36,7 @@ app.use('/api/labs',labRoute);
 app.use('/api/',searchRoute);
 app.use('/api/cart',cartRoute);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/specialties', specialtyRoutes); 
 
 
 

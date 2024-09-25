@@ -1,23 +1,16 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { bookAppointment, getAppointmentsByDoctor, getDoctor, getDoctorsBySpecialties, getFeaturedDoctors, getSpecialties } from './doctorApi';
+import { bookAppointment, getAppointmentsByDoctor, getDoctor, getDoctorsBySpecialties, getFeaturedDoctors } from './doctorApi';
 
-export const getSpecialtiesThunk = createAsyncThunk('/doctors/fetchSpecialties', async () => {
-    try {
-        const specialties = await getSpecialties();
-        return specialties;
-    } catch (error) {
-        return (error.message);
-    }
-})
 
-export const getDoctorsBySpecialtiesThunk = createAsyncThunk('/doctors/fetchDoctorsBySpecialty', async (specialty) => {
-    try {
-        const doctors = await getDoctorsBySpecialties(specialty);
-        return doctors;
-    } catch (error) {
-        return (error.message);
-    }
+export const getDoctorsBySpecialtiesThunk = createAsyncThunk('/doctors/fetchDoctorsBySpecialty', async (specialtyId) => {
+  try {
+      const doctors = await getDoctorsBySpecialties(specialtyId);
+      return doctors;
+  } catch (error) {
+      return (error.message);
+  }
 });
+
 
 export const getFeaturedDoctorsThunk = createAsyncThunk('/doctors/fetchFeatured', async () => {
     try {
@@ -84,17 +77,6 @@ export const getAppointmentsByDoctorThunk = createAsyncThunk(
     reducers: {},
     extraReducers: (builder) => {
       builder
-        .addCase(getSpecialtiesThunk.pending, (state) => {
-          state.status = 'Loading';
-        })
-        .addCase(getSpecialtiesThunk.fulfilled, (state, action) => {
-          state.status = 'Success';
-          state.specialties = action.payload;
-        })
-        .addCase(getSpecialtiesThunk.rejected, (state, action) => {
-          state.status = 'Failed';
-          state.error = action.payload;
-        })
         .addCase(getDoctorsBySpecialtiesThunk.pending, (state) => {
           state.status = 'Loading';
         })

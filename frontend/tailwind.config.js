@@ -4,7 +4,7 @@ const flowbite = require("flowbite-react/tailwind");
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    flowbite.content()
+    flowbite.content(),
   ],
   theme: {
     extend: {
@@ -24,7 +24,7 @@ module.exports = {
         'custom-gradient': 'linear-gradient(to right, #34D399, #22C55E, #16A34A)',
       },
       height: {
-        custom: '50rem'
+        custom: '50rem',
       },
       spacing: {
         '144': '36rem',
@@ -42,6 +42,12 @@ module.exports = {
         'high': '1000',
         'medium': '500',
         'low': '100',
+      },
+      // Add custom font sizes here
+      fontSize: {
+        'xxs': '0.50rem',   // Extra small font
+        '3xl': '1.875rem',  // 3x large font (for example)
+        '4.5xl': '2.5rem',  // Custom font size between 4xl and 5xl
       }
     },
     fontFamily: {

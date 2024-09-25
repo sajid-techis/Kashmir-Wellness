@@ -1,44 +1,19 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getSpecialtiesThunk } from "../../features/doctors/doctorSlice";
+import { fetchSpecialtiesThunk } from "../../features/specialties/specialtySlice";
 import { FidgetSpinner } from "react-loader-spinner";
-
-const getImageForSpecialty = (name) => {
-  switch (name) {
-    case "Cardiology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382368/Category-Images/cardiology_xndpjd.jpg";
-    case "Dermatology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382369/Category-Images/dermatology_d2ht7m.jpg";
-    case "Endocrinology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722384132/Category-Images/Endocrinology_vn9zp9.jpg";
-    case "Gastroenterology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722384259/Category-Images/Gastroenterology_j27u48.jpg";
-    case "General Medicine":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722384349/Category-Images/General-Medicine_uxkieu.jpg";
-    case "Neurology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382377/Category-Images/neurology_hyn22q.jpg";
-    case "Obstetrics and Gynecology":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382374/Category-Images/gynecology_omwlrl.jpg";
-    case "Orthopedic Surgery":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382379/Category-Images/orthopedics_gwqgtc.jpg";
-    case "Pediatrics":
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382380/Category-Images/pediatrics_rhn7r0.jpg";
-    default:
-      return "https://res.cloudinary.com/dj6bt46ar/image/upload/v1722382368/Category-Images/cardiology_xndpjd.jpg";
-  }
-};
 
 const SpecialtiesSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const specialties = useSelector((state) => state.doctor.specialties);
-  const status = useSelector((state) => state.doctor.status);
-  const error = useSelector((state) => state.doctor.error);
+  const specialties = useSelector((state) => state.specialty.specialties);
+  const status = useSelector((state) => state.specialty.status);
+  const error = useSelector((state) => state.specialty.error);
 
   useEffect(() => {
-    dispatch(getSpecialtiesThunk());
+    dispatch(fetchSpecialtiesThunk());
   }, [dispatch]);
 
   const handleSpecialtyClick = (specialtyId) => {
@@ -68,17 +43,17 @@ const SpecialtiesSidebar = () => {
           <li
             key={specialty._id}
             className={`flex flex-col items-center text-center p-2 cursor-pointer rounded-lg transition duration-300 hover:bg-green-600 hover:text-white ${
-              isActive(specialty._id) ? 'bg-green-700 text-white' : 'text-gray-200'
+              isActive(specialty.name) ? 'bg-green-700 text-white ' : 'text-gray-200'
             }`}
             onClick={() => handleSpecialtyClick(specialty._id)}
           >
             <div className="flex flex-col items-center">
               <img
-                src={getImageForSpecialty(specialty._id)} // Ensure specialty._id matches your cases
-                alt={specialty._id}
-                className="w-12 h-12 object-cover rounded-full mb-1"
+                src={specialty.image} 
+                alt={specialty.name}
+                className="w-10 h-10 object-cover rounded-full mb-1"
               />
-              <span className="text-xs">{specialty._id}</span> 
+              <span className="text-xxs">{specialty.name}</span>
             </div>
           </li>
         ))}
