@@ -51,9 +51,9 @@ const SpecialtiesSidebar = () => {
               <img
                 src={specialty.image} 
                 alt={specialty.name}
-                className="w-10 h-10 object-cover rounded-full mb-1"
+                className="w-12 h-12 object-cover rounded-full mb-1"
               />
-              <span className="text-xxs">{specialty.name}</span>
+              <span className="text-xs">{specialty.name}</span>
             </div>
           </li>
         ))}

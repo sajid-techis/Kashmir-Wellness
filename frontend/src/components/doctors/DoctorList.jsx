@@ -8,7 +8,6 @@ import { FidgetSpinner } from "react-loader-spinner";
 
 const DoctorList = () => {
     const { specialtyId } = useParams();
-    console.log(specialtyId)
     const dispatch = useDispatch();
     const doctors = useSelector((state) => state.doctor.doctors);
     const status = useSelector((state) => state.doctor.status);
@@ -45,7 +44,7 @@ const DoctorList = () => {
                 </div>
             </div>
             <div className="flex">
-                <div className="w-1/5 bg-white pb-14 text-primary max-h-screen overflow-y-auto flex flex-col items-center lg:w-40 lg:py-8">
+                <div className="w-1/4 bg-white pb-14 text-primary max-h-screen overflow-y-auto flex flex-col items-center lg:w-40 lg:py-8">
                     <SpecialtiesSidebar />
                 </div>
                 <div className="mt-0 px-2 lg:px-4 flex-1">

@@ -23,7 +23,7 @@ const CategoriesSidebar = () => {
 
   if (status === 'Loading') {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full bg-gradient-to-b from-green-800 to-blue-900 w-full">
         <FidgetSpinner visible={true} height="80" width="80" ariaLabel="fidget-spinner-loading" />
       </div>
     );
@@ -48,9 +48,9 @@ const CategoriesSidebar = () => {
               <img
                 src={category.imageUrl}
                 alt={category.name}
-                className="w-10 h-10 object-cover rounded-full mb-1"
+                className="w-12 h-12 object-cover rounded-full mb-1"
               />
-              <span className="text-xxs">{category.name}</span>
+              <span className="text-xs">{category.name}</span>
             </div>
           </li>
         ))}
