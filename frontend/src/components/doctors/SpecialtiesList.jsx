@@ -42,7 +42,7 @@ const SpecialtiesList = () => {
                 onClick={() => onSelectSpecialty(specialty._id)} 
               >
                 <img
-                  src={specialty.image} // Use specialty.image directly
+                  src={specialty.image} 
                   alt={specialty.name}
                   className="w-full h-40 object-cover rounded-t-lg lg:h-60"
                 />

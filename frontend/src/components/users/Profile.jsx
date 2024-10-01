@@ -5,7 +5,8 @@ import { getUserProfileThunk } from "../../features/users/userSlice";
 import { toast } from "react-toastify";
 import UserAppointments from "../appointments/UserAppointments";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import { FidgetSpinner } from "react-loader-spinner"; // Importing the spinner
+import { FidgetSpinner } from "react-loader-spinner"; 
+import UserLabAppointments from "../labAppointment/UserLabAppointments";
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -71,6 +72,10 @@ const Profile = () => {
             {/* Render UserAppointments */}
             <div className="p-4 pb-24">
                 <UserAppointments patientId={userInfo?._id} />
+            </div>
+
+            <div className="p-4 pb-24">
+                <UserLabAppointments patientId={userInfo?._id} />
             </div>
         </div>
     );

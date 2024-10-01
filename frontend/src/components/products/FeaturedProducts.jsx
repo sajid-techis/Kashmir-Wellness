@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { FidgetSpinner } from "react-loader-spinner";
 import { Button } from "flowbite-react";
 import { FaCartPlus } from "react-icons/fa";
+import Slider from "react-slick";  // Importing slider for multiple images
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 const FeaturedProducts = () => {
   const dispatch = useDispatch();
@@ -35,6 +38,18 @@ const FeaturedProducts = () => {
     window.scrollTo(0, 0);
   };
 
+  // Slider settings for multiple images
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: false, // Disable navigation arrows for simplicity
+  };
+
   return (
     <div className="w-[95%] mx-auto mt-8">
       <div className="flex justify-between items-center my-4">
@@ -44,32 +59,48 @@ const FeaturedProducts = () => {
         </Button>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-        {products.slice(0, 6).map((product) => (
-          <div
-            key={product._id}
-            className="relative flex flex-col gap-2 bg-gradient-to-b from-green-700 to-blue-800 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
-          >
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="w-full h-40 object-cover rounded-t-lg lg:h-60"
-            />
-            <div className="flex-1 p-4 text-gray-100">
-              <h3 className="text-sm sm:text-base md:text-lg font-semibold">{product.name}</h3>
-              <p className="text-xs sm:text-sm md:text-base">{product.description}</p>
-              <p className="text-xl font-bold text-yellow-400 mt-2">₹{product.price.toFixed(1)}</p>
+        {products.slice(0, 6).map((product) => {
+          // Ensure imageUrl is an array
+          const images = Array.isArray(product.imageUrl) ? product.imageUrl : [product.imageUrl];
+
+          return (
+            <div
+              key={product._id}
+              className="relative flex flex-col gap-2 bg-gradient-to-b from-green-700 to-blue-800 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
+            >
+              {images.length > 1 ? (
+                <Slider {...sliderSettings}>
+                  {images.map((image, index) => (
+                    <div key={index}>
+                      <img
+                        src={image}
+                        alt={product.name}
+                        className="w-full h-40 object-cover rounded-t-lg lg:h-60"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              ) : (
+                <img
+                  src={images[0]}
+                  alt={product.name}
+                  className="w-full h-40 object-cover rounded-t-lg lg:h-60"
+                />
+              )}
+              <div className="flex-1 p-4 text-gray-100">
+                <h3 className="text-sm sm:text-base md:text-lg font-semibold">{product.name}</h3>
+                <p className="text-xs sm:text-sm md:text-base">{product.description}</p>
+                <p className="text-xl font-bold text-yellow-400 mt-2">₹{product.price.toFixed(1)}</p>
+              </div>
+              <div className="flex justify-between items-center p-2 gap-1 lg:p-4 lg:gap-4">
+                <Button gradientMonochrome="success" className="!p-0 lg:p-1 buy-now">
+                  <FaCartPlus className="mr-2 h-5 w-5" />
+                  Buy now
+                </Button>
+              </div>
             </div>
-            <div className="flex justify-between items-center p-2 gap-1 lg:p-4 lg:gap-4">
-              <Button
-                gradientMonochrome="success"
-                className="!p-0 lg:p-1 buy-now"
-              >
-                <FaCartPlus className="mr-2 h-5 w-5" />
-                Buy now
-              </Button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -113,8 +113,6 @@ router.get("/:doctorId/appointments", async (req, res) => {
 });
 
 
-
-// Get appointments for a patient
 // Get appointments for a patient
 router.get("/patients/:patientId/appointments", async (req, res) => {
   try {

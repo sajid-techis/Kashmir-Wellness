@@ -6,6 +6,7 @@ import { getDoctorDetailsThunk } from "../../features/doctors/doctorSlice";
 import Calendar from "react-calendar"; 
 import 'react-calendar/dist/Calendar.css';
 import { FaCalendarAlt } from "react-icons/fa"; 
+import CustomSelect from "../common/CustomSelect"; 
 
 const BookAppointment = () => {
   const { doctorId } = useParams();
@@ -52,9 +53,6 @@ const BookAppointment = () => {
     }
   }, [doctor]);
 
-
-  
-
   const handleDateChange = async (date) => {
     const selectedDate = date.toLocaleDateString('en-CA');
     const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
@@ -96,8 +94,6 @@ const BookAppointment = () => {
     }
   };
   
-  
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setPatientData({ ...patientData, [name]: value });
@@ -135,8 +131,6 @@ const BookAppointment = () => {
            fullyBookedDates.includes(date.toLocaleDateString('en-CA'));
   };
   
-  
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -196,19 +190,14 @@ const BookAppointment = () => {
           </div>
         )}
 
-        <select
-          name="timeSlot"
+        {/* Replace the default select with CustomSelect for Time Slots */}
+        <CustomSelect
+          options={timeSlots}
           value={patientData.timeSlot}
-          onChange={handleInputChange}
-          className="w-full p-2 border border-gray-300 rounded-md mb-4 bg-gray-800 text-gray-200 focus:ring focus:ring-blue-300"
-        >
-          <option value="">Select a Time Slot</option>
-          {timeSlots.map((slot, index) => (
-            <option key={index} value={slot}>
-              {slot}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => setPatientData({ ...patientData, timeSlot: value })}
+          label="Select Time Slot"
+        />
+
         <button
           onClick={handleSubmit}
           className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200"

@@ -26,7 +26,7 @@ const UserAppointments = ({ patientId }) => {
 
   return (
     <div className="p-4 sm:p-6 md:p-8 bg-gray-50 rounded-2xl shadow-lg">
-      <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center text-gray-800">Your Appointments</h2>
+      <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center text-gray-800">Doctor's Appointments</h2>
       {appointments.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {appointments.map((appointment) => (
@@ -56,7 +56,7 @@ const UserAppointments = ({ patientId }) => {
             </div>
           ))}
         </div>
-      ) : (
+      ) : ( 
         <p className="text-center text-gray-400">No appointments found.</p>
       )}
     </div>

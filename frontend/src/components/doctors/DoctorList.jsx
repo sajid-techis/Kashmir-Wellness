@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDoctorsBySpecialtiesThunk } from "../../features/doctors/doctorSlice";
+import { fetchSpecialtiesThunk } from "../../features/specialties/specialtySlice"; 
 import { useNavigate, useParams } from "react-router-dom";
 import SearchBar from "../common/SearchBar";
 import SpecialtiesSidebar from "./SpecialtiesSidebar";
@@ -9,42 +10,50 @@ import { FidgetSpinner } from "react-loader-spinner";
 const DoctorList = () => {
     const { specialtyId } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const doctors = useSelector((state) => state.doctor.doctors);
+    const specialties = useSelector((state) => state.specialty.specialties); 
     const status = useSelector((state) => state.doctor.status);
     const error = useSelector((state) => state.doctor.error);
+    const { token } = useSelector((state) => state.user);
     const [searchQuery, setSearchQuery] = useState("");
-    const navigate = useNavigate();
-  
-      useEffect(() => {
-        
-        dispatch(getDoctorsBySpecialtiesThunk(specialtyId));
-      }, [dispatch, specialtyId]); 
-  
-  
+
+    useEffect(() => {
+        dispatch(getDoctorsBySpecialtiesThunk(specialtyId)); 
+    }, [dispatch, specialtyId]);
+
+    const getSpecialtyName = (specialtyId) => {
+        const specialty = specialties.find(specialty => specialty._id === specialtyId);
+        return specialty ? specialty.name : "Unknown Specialty";
+    };
 
     const filteredDoctors = doctors.filter(
         (doctor) =>
             doctor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            doctor.specialty.name.toLowerCase().includes(searchQuery.toLowerCase()) || // Adjust based on your data structure
+            getSpecialtyName(doctor.specialty).toLowerCase().includes(searchQuery.toLowerCase()) ||
             doctor.qualification.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const handleBookAppointment = (doctorId) => {
-        navigate(`/book-appointment/${doctorId}`);
+        if (!token) {
+            navigate('/login'); // Redirect to login if user is not authenticated
+        } else {
+            navigate(`/book-appointment/${doctorId}`);
+        }
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-green-800 to-blue-900">
             <div className="sticky top-0 left-0 right-0 z-20 bg-white p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between">
                 <h2 className="text-xl md:text-3xl font-bold text-primary hidden lg:block">
-                    Doctors in {specialtyId} {/* Display specialty name if available */}
+                    Doctors in {getSpecialtyName(specialtyId)}
                 </h2>
                 <div className="relative w-full lg:w-1/2">
                     <SearchBar searchTerm={searchQuery} setSearchTerm={setSearchQuery} />
                 </div>
             </div>
             <div className="flex">
-                <div className="w-1/4 bg-white pb-14 text-primary max-h-screen overflow-y-auto flex flex-col items-center lg:w-40 lg:py-8">
+                <div className="w-1/4 bg-white pb-14 text-primary max-h-screen overflow-y-auto flex flex-col items-center lg:w-40 ">
                     <SpecialtiesSidebar />
                 </div>
                 <div className="mt-0 px-2 lg:px-4 flex-1">
@@ -71,7 +80,7 @@ const DoctorList = () => {
                                         />
                                         <div className="flex-1 p-4 text-gray-100">
                                             <h3 className="text-lg font-semibold">{doctor.name}</h3>
-                                            <p className="text-sm">Specialty: {doctor.specialty.name}</p>
+                                            <p className="text-sm">Specialty: {getSpecialtyName(doctor.specialty)}</p> 
                                             <p className="text-sm">Qualifications: {doctor.qualification}</p>
                                             <p className="text-sm">Experience: {doctor.experience} years</p>
                                             <p className="text-sm">Email: {doctor.email}</p>
