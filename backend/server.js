@@ -13,6 +13,7 @@ const searchRoute = require('./routes/searchRoute');
 const cartRoute = require('./routes/cartRoute');
 const appointmentRoutes = require('./routes/appointmentsRoutes');
 const specialtyRoutes = require('./routes/specialtyRoute'); 
+const labAppointmentsRouter = require ('./routes/labAppointmentRoutes')
 
 
 
@@ -37,6 +38,7 @@ app.use('/api/',searchRoute);
 app.use('/api/cart',cartRoute);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/specialties', specialtyRoutes); 
+app.use('/api/labAppointments', labAppointmentsRouter);
 
 
 

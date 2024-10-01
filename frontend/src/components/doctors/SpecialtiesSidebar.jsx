@@ -13,8 +13,11 @@ const SpecialtiesSidebar = () => {
   const error = useSelector((state) => state.specialty.error);
 
   useEffect(() => {
-    dispatch(fetchSpecialtiesThunk());
-  }, [dispatch]);
+    if (specialties.length === 0) {
+      dispatch(fetchSpecialtiesThunk());
+    }
+  }, [dispatch, specialties]);
+  
 
   const handleSpecialtyClick = (specialtyId) => {
     navigate(`/specialty/${specialtyId}`);
@@ -43,17 +46,17 @@ const SpecialtiesSidebar = () => {
           <li
             key={specialty._id}
             className={`flex flex-col items-center text-center p-2 cursor-pointer rounded-lg transition duration-300 hover:bg-green-600 hover:text-white ${
-              isActive(specialty.name) ? 'bg-green-700 text-white ' : 'text-gray-200'
+              isActive(specialty._id) ? 'bg-green-700 text-white' : 'text-gray-200'
             }`}
             onClick={() => handleSpecialtyClick(specialty._id)}
           >
             <div className="flex flex-col items-center">
               <img
-                src={specialty.image} 
+                src={specialty.image}
                 alt={specialty.name}
                 className="w-12 h-12 object-cover rounded-full mb-1"
               />
-              <span className="text-xs">{specialty.name}</span>
+              <span className="text-xs p-1">{specialty.name}</span>
             </div>
           </li>
         ))}
@@ -61,5 +64,7 @@ const SpecialtiesSidebar = () => {
     </div>
   );
 };
+
+
 
 export default SpecialtiesSidebar;

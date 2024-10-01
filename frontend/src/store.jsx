@@ -8,6 +8,7 @@ import searchReducer from './features/search/searchSlice'
 import cartReducer from './features/carts/cartSlice'
 import appointmentReducer from './features/appointments/appointmentSlice'
 import specialtyReducer from './features/specialties/specialtySlice'
+import labAppointmentReducer from './features/labAppointment/labAppointmentSlice'
 
 
 
@@ -22,6 +23,7 @@ const store = configureStore({
         cart: cartReducer,
         appointments: appointmentReducer,
         specialty:specialtyReducer,
+        labAppointment: labAppointmentReducer,
     }
 })
 

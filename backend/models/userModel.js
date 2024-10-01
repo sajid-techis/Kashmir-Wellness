@@ -1,31 +1,30 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-
-
-
 const userSchema = new mongoose.Schema({
-    name: {type:String,required:true},
-    email: {type:String,required:true},
-    password: {type:String,required:true},
-    phoneNumber: {type:String,required:true},
-    address: {type:String,required:true},
-    city: {type:String,required:true},
-    state: {type:String,required:true},
-    image:{type: String},
-    appointments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }]
-},{timestamps:true})
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  phoneNumber: { type: String, required: true },
+  address: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  image: { type: String },
+  appointments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Appointment' }], // Doctor appointments
+  labAppointments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabAppointment' }] // Lab appointments
+}, { timestamps: true });
 
-userSchema.pre('save', async function(next){
-    if (!this.isModified('password')) 
-        return next();
-    this.password = await bcrypt.hash(this.password,10);
-    next();
-})
+// Hash password before saving
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) 
+    return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
+// Compare password method
 userSchema.methods.comparePassword = function(password) {
-    return bcrypt.compare(password,this.password);
-}
+  return bcrypt.compare(password, this.password);
+};
 
-module.exports = mongoose.model("User",userSchema);
-
+module.exports = mongoose.model("User", userSchema);
