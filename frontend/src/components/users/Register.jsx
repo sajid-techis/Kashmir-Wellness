@@ -26,6 +26,7 @@ const Register = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState(null); 
+  const [loading, setLoading] = useState(false);
 
   const handleImageUpload = async (e) => {
     const selectedFile = e.target.files[0];
@@ -55,9 +56,13 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true); // Start loading spinner
+
+  try {
+    await dispatch(
       registerUserThunk({
         name,
         email,
@@ -68,10 +73,19 @@ const Register = () => {
         city,
         state,
       })
-    ).unwrap().then(() => {
-      navigate("/login");
-    });
-  };
+    ).unwrap();
+
+    localStorage.setItem('userEmail', email); // Store email for verification
+    navigate('/verify'); // Redirect to verify page
+  } catch (error) {
+    console.error("Registration failed:", error);
+  } finally {
+    setLoading(false); // Stop spinner after request completes
+  }
+};
+
+  
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-green-800 to-blue-900 p-4">
@@ -167,11 +181,13 @@ const Register = () => {
           />
         )}
         <Button
-          type="submit"
-          className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-        >
-          {status === "loading" ? <Spinner size="sm" /> : "Register"}
-        </Button>
+  type="submit"
+  className="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+  disabled={loading} // Disable button while loading
+>
+  {loading ? <Spinner size="sm" /> : "Register"}
+</Button>
+
         <div className='flex items-center justify-center gap-2 my-4'>
           <p className="text-gray-200">Already have an account?</p>
           <Link to='/login' className='text-blue-300 hover:underline'>Login Here</Link>

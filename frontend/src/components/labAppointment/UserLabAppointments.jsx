@@ -11,10 +11,8 @@ const UserLabAppointments = ({ patientId }) => {
     (state) => state.labAppointment
   );
 
-  console.log(appointments)
   
   const labs = useSelector((state) => state.lab.labs); 
-  console.log(labs);
 
   useEffect(() => {
     if (patientId) {

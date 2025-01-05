@@ -57,9 +57,18 @@ const Login = () => {
           </button>
           {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
         </form>
-        <div className='flex items-center justify-center gap-2 my-4'>
-          <p className="text-gray-200">Don't have an account?</p>
-          <Link to='/register' className='text-blue-300 hover:underline'>Register Here</Link>
+        <div className="flex my-4">
+          <Link to="/forgot-password" className="text-blue-300 hover:underline">
+            Forgot Password?
+          </Link>
+          </div>
+          <div className="flex items-center justify-between my-4">
+          <div className="flex items-center gap-2">
+            <p className="text-gray-200">Don't have an account?</p>
+            <Link to="/register" className="text-blue-300 hover:underline">
+              Register Here
+            </Link>
+          </div>
         </div>
       </div>
     </div>

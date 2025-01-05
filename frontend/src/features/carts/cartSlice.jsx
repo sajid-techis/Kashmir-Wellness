@@ -33,7 +33,7 @@ export const removeItemFromCartThunk = createAsyncThunk(
         const token = getState().user.token;
         try {
             const response = await removeCartItem(productId, token);
-            return response;
+            return response; // Ensure this returns the expected structure
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -43,15 +43,20 @@ export const removeItemFromCartThunk = createAsyncThunk(
 export const getCartItemsThunk = createAsyncThunk(
     'cart/getItems',
     async (_, { rejectWithValue, getState }) => {
-        const token = getState().user.token;
-        try {
-            const response = await getCartItems(token);
-            return response;
-        } catch (error) {
-            return rejectWithValue(error.message);
+      const token = getState().user.token;
+      try {
+        const response = await getCartItems(token);
+        return response;
+      } catch (error) {
+        // If "Cart not found", return an empty cart object instead of rejecting
+        if (error.message === "Cart not found") {
+          return { items: [], total: 0 }; 
         }
+        return rejectWithValue(error.message);
+      }
     }
-);
+  );
+  
 
 const cartSlice = createSlice({
     name: 'cart',

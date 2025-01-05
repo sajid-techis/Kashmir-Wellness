@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { FidgetSpinner } from "react-loader-spinner";
 import { Button } from "flowbite-react";
 import { FaCartPlus } from "react-icons/fa";
-import Slider from "react-slick";  // Importing slider for multiple images
-import "slick-carousel/slick/slick.css"; 
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa"; // Star icons
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const FeaturedProducts = () => {
@@ -22,12 +23,15 @@ const FeaturedProducts = () => {
 
   if (status === "Loading") {
     return (
-      <FidgetSpinner
-        visible={true}
-        height="80"
-        width="80"
-        ariaLabel="fidget-spinner-loading"
-      />
+      <div className="flex justify-center items-center h-64">
+        <FidgetSpinner
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="fidget-spinner-loading"
+        />
+        <p className="mt-4 text-lg">Loading featured products...</p>
+      </div>
     );
   }
 
@@ -38,7 +42,6 @@ const FeaturedProducts = () => {
     window.scrollTo(0, 0);
   };
 
-  // Slider settings for multiple images
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -47,7 +50,25 @@ const FeaturedProducts = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    arrows: false, // Disable navigation arrows for simplicity
+    arrows: false,
+  };
+
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    return (
+      <div className="flex items-center text-yellow-400">
+        {[...Array(fullStars)].map((_, i) => (
+          <FaStar key={`full-${i}`} />
+        ))}
+        {halfStar && <FaStarHalfAlt />}
+        {[...Array(emptyStars)].map((_, i) => (
+          <FaRegStar key={`empty-${i}`} />
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -60,8 +81,12 @@ const FeaturedProducts = () => {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {products.slice(0, 6).map((product) => {
-          // Ensure imageUrl is an array
           const images = Array.isArray(product.imageUrl) ? product.imageUrl : [product.imageUrl];
+          const firstBatch = product.batches[0] || {};
+          const price = firstBatch.price || 0;
+          const stock = firstBatch.stock || 0;
+          const averageRating = product.ratings.averageRating || 0;
+          const numberOfRatings = product.ratings.numberOfRatings || 0;
 
           return (
             <div
@@ -89,8 +114,13 @@ const FeaturedProducts = () => {
               )}
               <div className="flex-1 p-4 text-gray-100">
                 <h3 className="text-sm sm:text-base md:text-lg font-semibold">{product.name}</h3>
-                <p className="text-xs sm:text-sm md:text-base">{product.description}</p>
-                <p className="text-xl font-bold text-yellow-400 mt-2">₹{product.price.toFixed(1)}</p>
+                <p className="text-xl font-bold text-yellow-400 mt-2">₹{price.toFixed(2)}</p>
+                <div className="mt-2">
+                  {renderStars(averageRating)}
+                  <p className="text-sm text-gray-300">
+                    {averageRating.toFixed(1)} ({numberOfRatings} reviews)
+                  </p>
+                </div>
               </div>
               <div className="flex justify-between items-center p-2 gap-1 lg:p-4 lg:gap-4">
                 <Button gradientMonochrome="success" className="!p-0 lg:p-1 buy-now">

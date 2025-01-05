@@ -14,6 +14,8 @@ const cartRoute = require('./routes/cartRoute');
 const appointmentRoutes = require('./routes/appointmentsRoutes');
 const specialtyRoutes = require('./routes/specialtyRoute'); 
 const labAppointmentsRouter = require ('./routes/labAppointmentRoutes')
+const adminRouter = require('./routes/adminRoute');
+
 
 
 
@@ -39,7 +41,7 @@ app.use('/api/cart',cartRoute);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/specialties', specialtyRoutes); 
 app.use('/api/labAppointments', labAppointmentsRouter);
-
+app.use('/api/admin', adminRouter);
 
 
 
@@ -48,7 +50,7 @@ mongoose.connect(process.env.MONGO_URI,{ssl:true})
 .then(() => console.log("Mongodb Connected"))
 .catch((error) => console.error(error));
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => console.log(`Server listening on ${PORT}`));
 

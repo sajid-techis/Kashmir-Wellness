@@ -4,45 +4,45 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Product = require("../models/productModel");
 
-// Create a new product
+
 // Create a new product
 router.post("/create", async (req, res) => {
   try {
-      const {
-          name,
-          description,
-          category,
-          price,
-          brand,
-          stock,
-          expirationDate,
-          prescriptionRequired,
-          imageUrl, // This should now be an array of strings
-          ratings 
-      } = req.body;
+      const productsData = req.body; // Expecting an array of product objects
 
-      const newProduct = new Product({
-          name,
-          description,
-          category,
-          price,
-          brand,
-          stock,
-          expirationDate,
-          prescriptionRequired,
-          imageUrl: imageUrl || [], // Ensure this is an array, default to an empty array if not provided
-          ratings: ratings || { averageRating: 0, numberOfRatings: 0 }
-      });
+      // Validate that the input is an array
+      if (!Array.isArray(productsData)) {
+          return res.status(400).json({ message: "Invalid input: expected an array of products." });
+      }
 
-      const savedProduct = await newProduct.save();
+      const savedProducts = [];
 
-      res.status(200).json({ message: "Product saved successfully", product: savedProduct });
+      for (const productData of productsData) {
+          const {
+              name, description, category, brand, prescriptionRequired,
+              imageUrl, ratings, batches
+          } = productData;
+
+          const newProduct = new Product({
+              name,
+              description,
+              category,
+              brand,
+              prescriptionRequired,
+              imageUrl: imageUrl || [],
+              ratings: ratings || { averageRating: 0, numberOfRatings: 0 },
+              batches: batches || [] // Store batch info here
+          });
+
+          const savedProduct = await newProduct.save();
+          savedProducts.push(savedProduct);
+      }
+
+      res.status(200).json({ message: "Products saved successfully", products: savedProducts });
   } catch (error) {
-      res.status(500).json({ message: "Failed to create product", error: error.message });
+      res.status(500).json({ message: "Failed to create products", error: error.message });
   }
 });
-
-
 
 // Get All Products with optional limit
 router.get('/get', async (req, res) => {
@@ -64,8 +64,12 @@ router.get('/get', async (req, res) => {
       ];
     }
 
-    const products = await Product.find(filters);
+    // Optional: Filter products by batch expiration date
+    if (req.query.expirationDate) {
+      filters['batches.expirationDate'] = { $lte: new Date(req.query.expirationDate) };
+    }
 
+    const products = await Product.find(filters);
     res.status(200).json({
       message: 'Products retrieved successfully',
       products
@@ -75,6 +79,7 @@ router.get('/get', async (req, res) => {
     res.status(500).json({ message: 'Error fetching products', error: error.message });
   }
 });
+
 
 //Get Featured Products
 
@@ -144,6 +149,8 @@ router.put('/update/:id', async (req, res) => {
       res.status(500).json({ message: 'Error updating product', error: error.message });
   }
 });
+
+
 
 
 module.exports = router;

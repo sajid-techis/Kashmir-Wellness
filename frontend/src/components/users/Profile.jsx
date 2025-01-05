@@ -8,6 +8,10 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { FidgetSpinner } from "react-loader-spinner"; 
 import UserLabAppointments from "../labAppointment/UserLabAppointments";
 
+// Import default images at the top
+import defaultBackground from '../../assets/images/Logo4.jpeg'; // Adjust path if necessary
+import defaultProfileImage from '../../assets/images/Logo3.jpeg'; // Adjust path if necessary
+
 const Profile = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -38,15 +42,16 @@ const Profile = () => {
         <div className="flex flex-col min-h-screen bg-gradient-to-b from-green-800 to-blue-900">
             <div className="flex justify-center items-center flex-1 p-4">
                 <div className="max-w-lg w-full bg-gradient-to-r from-green-900 to-blue-800 shadow-2xl rounded-3xl overflow-hidden">
-                    <div className="relative bg-cover bg-center h-48" style={{ backgroundImage: `url(${userInfo?.image || 'default-background.jpg'})` }}>
+                    <div
+                        className="relative bg-cover bg-center h-48"
+                        style={{ backgroundImage: `url(${userInfo?.image || defaultBackground})` }}
+                    >
                         <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-                            {userInfo?.image && (
-                                <img
-                                    className="h-32 w-32 rounded-full border-4 border-white shadow-lg"
-                                    src={userInfo.image}
-                                    alt="Profile"
-                                />
-                            )}
+                            <img
+                                className="h-32 w-32 rounded-full border-4 border-white shadow-lg"
+                                src={userInfo?.image || defaultProfileImage} // Use imported default image
+                                alt="Profile"
+                            />
                         </div>
                     </div>
                     <div className="p-6 mt-16 text-gray-100">

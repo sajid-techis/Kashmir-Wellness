@@ -8,9 +8,8 @@ import { addItemToCartThunk, updateCartItemThunk, removeItemFromCartThunk, getCa
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
-
 const ProductCard = ({ product }) => {
-  const { _id } = product;
+  const { _id, batches, imageUrl } = product;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -53,7 +52,7 @@ const ProductCard = ({ product }) => {
           setQuantity(newQuantity);
           await dispatch(updateCartItemThunk({ productId: _id, quantity: newQuantity })).unwrap();
       } else {
-          await dispatch(updateCartItemThunk({ productId: _id })).unwrap();
+          await dispatch(removeItemFromCartThunk({ productId: _id })).unwrap();
           setQuantity(0);
           setInCart(false);
       }
@@ -66,23 +65,26 @@ const ProductCard = ({ product }) => {
   // Slider settings
   const settings = {
     dots: true,
-    infinite: product.imageUrl.length > 1, // Enable infinite scroll only if there are multiple images
+    infinite: imageUrl.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: product.imageUrl.length > 1, // Enable autoplay only if there are multiple images
+    autoplay: imageUrl.length > 1,
     autoplaySpeed: 3000,
-    arrows: false, // Disable navigation arrows
-    fade: true, // Enable fade effect
+    arrows: false,
+    fade: true,
     cssEase: "ease-in-out", 
 };
 
+  // Extracting price and stock from the first batch
+  const price = batches[0]?.price || 0;
+  const stock = batches[0]?.stock || 0;
 
   return (
       <div className="relative flex flex-col gap-2 bg-gradient-to-b from-green-700 to-blue-800 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer">
-          {product.imageUrl.length > 1 ? (
+          {imageUrl.length > 1 ? (
               <Slider {...settings}>
-                  {product.imageUrl.map((image, index) => (
+                  {imageUrl.map((image, index) => (
                       <div key={index}>
                           <img
                               src={image}
@@ -95,7 +97,7 @@ const ProductCard = ({ product }) => {
               </Slider>
           ) : (
               <img
-                  src={product.imageUrl[0]}
+                  src={imageUrl[0]}
                   alt={product.name}
                   className="w-full h-40 object-contain rounded-t-lg lg:h-60 pt-4"
                   onClick={handleClick}
@@ -104,7 +106,8 @@ const ProductCard = ({ product }) => {
           <div className="flex-1 p-4 text-gray-100">
               <h3 className="text-lg font-semibold">{product.name}</h3>
               <p className="text-sm">{product.description}</p>
-              <p className="text-xl font-bold text-yellow-400 mt-2">₹{product.price}</p>
+              <p className="text-xl font-bold text-yellow-400 mt-2">₹{price.toFixed(2)}</p>
+              <p className="text-sm text-gray-300">Stock: {stock}</p>
           </div>
           <div className="flex justify-between items-center p-4">
               {inCart ? (
@@ -135,4 +138,3 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
-

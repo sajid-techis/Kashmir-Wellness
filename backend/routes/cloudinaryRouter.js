@@ -4,10 +4,9 @@ const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
+const adminController = require('../controllers/adminController'); // Adjust the path as necessary
 
 dotenv.config();
-
-
 
 // Configure Cloudinary
 cloudinary.config({
@@ -25,15 +24,13 @@ const storage = new CloudinaryStorage({
     },
 });
 
-const upload = multer({ storage: storage });
+// Configure Multer for multiple uploads
+const upload = multer({ storage: storage }).array('images'); 
 
-// Upload endpoint
-router.post('/upload', upload.single('image'), (req, res) => {
-    if (req.file && req.file.path) {
-        res.json({ imageUrl: req.file.path });
-    } else {
-        res.status(400).json({ error: 'Failed to upload image' });
-    }
-});
+// Route to add a new product
+router.post('/admin/products', upload, adminController.addProduct);
+
+// Route to update a product
+router.put('/admin/products/:id', upload, adminController.updateProduct);
 
 module.exports = router;

@@ -1,23 +1,72 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getProductDetailsThunk } from '../../features/products/productSlice';
-import { FaShoppingCart, FaHeart } from 'react-icons/fa';
-import Slider from 'react-slick'; // Import the slider component
+import { addItemToCartThunk, getCartItemsThunk, updateCartItemThunk, removeItemFromCartThunk } from '../../features/carts/cartSlice';
+import { FaShoppingCart, FaHeart, FaMinus, FaPlus } from 'react-icons/fa';
+import Slider from 'react-slick'; 
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
 const ProductDetails = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const product = useSelector((state) => state.product.product);
     const status = useSelector((state) => state.product.status);
     const error = useSelector((state) => state.product.error);
+    const { token } = useSelector((state) => state.user);
+    const items = useSelector((state) => state.cart.items);
+
+    const [quantity, setQuantity] = useState(0);
+    const [inCart, setInCart] = useState(false);
 
     useEffect(() => {
         dispatch(getProductDetailsThunk(id));
     }, [id, dispatch]);
+
+    useEffect(() => {
+        if (items && product) {
+            const cartItem = items.find((item) => item.productId._id === product._id);
+            if (cartItem) {
+                setInCart(true);
+                setQuantity(cartItem.quantity);
+            } else {
+                setInCart(false);
+                setQuantity(0);
+            }
+        }
+    }, [items, product]);
+
+    const handleAddToCart = async () => {
+        if (!token) {
+            navigate('/login');
+        } else {
+            await dispatch(addItemToCartThunk({ productId: product._id, quantity: 1 })).unwrap();
+            dispatch(getCartItemsThunk());
+            setQuantity(1);
+            setInCart(true);
+        }
+    };
+
+    const handleIncreaseCart = async () => {
+        const newQuantity = quantity + 1;
+        setQuantity(newQuantity);
+        await dispatch(updateCartItemThunk({ productId: product._id, quantity: newQuantity })).unwrap();
+    };
+
+    const handleDecreaseQuantity = async () => {
+        if (quantity > 1) {
+            const newQuantity = quantity - 1;
+            setQuantity(newQuantity);
+            await dispatch(updateCartItemThunk({ productId: product._id, quantity: newQuantity })).unwrap();
+        } else {
+            await dispatch(removeItemFromCartThunk({ productId: product._id })).unwrap();
+            setQuantity(0);
+            setInCart(false);
+        }
+    };
 
     if (status === 'Loading') {
         return <p className="text-center text-gray-500">Loading...</p>;
@@ -28,11 +77,11 @@ const ProductDetails = () => {
     }
 
     if (status === 'Success' && product) {
-        // Slider settings with arrows disabled
+        // Slider settings
         const settings = {
             dots: true,
-            arrows: false, // Hide the arrows
-            infinite: product.imageUrl.length > 1, // Enable infinite only if more than 1 image
+            arrows: false,
+            infinite: product.imageUrl.length > 1,
             speed: 500,
             slidesToShow: 1,
             slidesToScroll: 1,
@@ -40,11 +89,15 @@ const ProductDetails = () => {
             autoplaySpeed: 3000,
         };
 
+        // Extracting price, stock, and expiration date from the first batch
+        const price = product.batches[0]?.price || 0;
+        const stock = product.batches[0]?.stock || 0;
+        const expirationDate = new Date(product.batches[0]?.expirationDate).toLocaleDateString();
+
         return (
             <div className="bg-gradient-to-b from-green-800 to-blue-900 min-h-screen flex items-center justify-center">
                 <div className="w-full max-w-5xl mx-auto mt-8 mb-20 px-4 sm:px-4 lg:px-8">
                     <div className="flex flex-col sm:flex-row gap-6 bg-gradient-to-r from-green-900 to-blue-800 rounded-3xl shadow-2xl p-6 md:p-8 pb-12 hover:shadow-xl transition-shadow duration-300 transform hover:scale-105">
-
                         {/* Product Image Slider */}
                         <div className="w-full sm:w-1/2 relative">
                             <Slider {...settings}>
@@ -82,7 +135,7 @@ const ProductDetails = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base">
                                 <p>
                                     <strong className="block font-semibold text-gray-200">Price: </strong>
-                                    <span className="text-yellow-400 text-2xl">${product.price}</span>
+                                    <span className="text-yellow-400 text-2xl">₹{price.toFixed(2)}</span>
                                 </p>
                                 <p>
                                     <strong className="block font-semibold text-gray-200">Brand: </strong>
@@ -90,11 +143,11 @@ const ProductDetails = () => {
                                 </p>
                                 <p>
                                     <strong className="block font-semibold text-gray-200">Stock: </strong>
-                                    {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                                    {stock > 0 ? 'In Stock' : 'Out of Stock'}
                                 </p>
                                 <p>
                                     <strong className="block font-semibold text-gray-200">Expiration: </strong>
-                                    {new Date(product.expirationDate).toLocaleDateString()}
+                                    {expirationDate}
                                 </p>
                                 <p>
                                     <strong className="block font-semibold text-gray-200">Prescription: </strong>
@@ -114,10 +167,31 @@ const ProductDetails = () => {
 
                             {/* Action Buttons */}
                             <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                                <button className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center transform hover:scale-110">
-                                    <FaShoppingCart className="mr-2" /> Add to Cart
-                                </button>
-                                <button className="bg-gradient-to-r from-gray-500 to-gray-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center transform hover:scale-110">
+                                {inCart ? (
+                                    <div className="flex items-center">
+                                        <button 
+                                            onClick={handleDecreaseQuantity} 
+                                            className="bg-red-500 text-white px-3 py-2 rounded-full mr-2"
+                                        >
+                                            <FaMinus />
+                                        </button>
+                                        <span className="text-lg text-gray-100">{quantity}</span>
+                                        <button 
+                                            onClick={handleIncreaseCart} 
+                                            className="bg-green-600 text-white px-3 py-2 rounded-full ml-2"
+                                        >
+                                            <FaPlus />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <button 
+                                        onClick={handleAddToCart} 
+                                        className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center"
+                                    >
+                                        <FaShoppingCart className="mr-2" /> Add to Cart
+                                    </button>
+                                )}
+                                <button className="bg-gradient-to-r from-gray-500 to-gray-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center">
                                     <FaHeart className="mr-2" /> Wishlist
                                 </button>
                             </div>

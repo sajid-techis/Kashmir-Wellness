@@ -105,10 +105,6 @@ router.delete('/remove', authenticate, async (req, res) => {
     }
 });
 
-
-
-
-
 // Get cart items
 router.get('/', authenticate, async (req, res) => {
     try {
